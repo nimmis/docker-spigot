@@ -1,4 +1,4 @@
-FROM nimmis/ubuntu14.04-jdk-1.7
+FROM nimmis/java:openjdk-8-jdk
 
 MAINTAINER nimmis <kjell.havneskold@gmail.com>
 
@@ -10,7 +10,6 @@ ENV SPIGOT_HOME /minecraft
 
 ADD spigot_init.sh /spigot_init.sh
 
-RUN apt-get update && apt-get install -y wget git
 RUN chmod +x /spigot_init.sh
 
 # Make special user for minecraft to run in
