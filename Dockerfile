@@ -12,6 +12,9 @@ ADD spigot_init.sh /spigot_init.sh
 
 RUN chmod +x /spigot_init.sh
 
+# fast workaround 
+RUN apt-get update && apt-get install -y wget git && apt-get clean all
+
 # Make special user for minecraft to run in
 
 RUN useradd -s /bin/bash -d /minecraft -m minecraft
