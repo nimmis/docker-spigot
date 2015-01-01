@@ -1,6 +1,15 @@
-This docker image builds and runs the spigot version of minecraft. If the spigot.jar is not found in
-the minecraft directory the system pulls down BuildTool and build a new spigot.jar from the latest
+## Minecraft server SPIGIT on Ubuntu 14.04 with openjava 1.8
+
+This docker image builds and runs the spigot version of minecraft. 
+
+If the spigot.jar is not found in the minecraft directory the system pulls down BuildTool and build a new spigot.jar from the latest
 released minecraft.jar
+
+## Why not a precompiled version of spigot included
+
+Due to leagal reasons you can build it but not redistribute the finished jar.
+
+## Starting the container
 
 To run the lastest stable version of this docker image run
 
