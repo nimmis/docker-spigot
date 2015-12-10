@@ -9,7 +9,7 @@ VOLUME ["/data/minecraft"]
 ENV DEBIAN_FRONTEND noninteractive
 
 #default directory for SPIGOT-server
-ENV SPIGOT_HOME /minecraft
+ENV SPIGOT_HOME /data/minecraft
 
 ADD start.sh /start.sh
 
