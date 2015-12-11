@@ -1,4 +1,4 @@
-FROM nimmis/java:openjdk-8-jdk
+FROM skardoska/debian-java
 
 MAINTAINER skardoska <koen253janssen@gmail.com>
 
