@@ -19,7 +19,6 @@ RUN chmod +x /start.sh
 RUN apt-get update && apt-get install -y wget git && apt-get clean all
 
 # Make special user for minecraft to run in
-
 RUN useradd -s /bin/bash -d /minecraft -m minecraft
 
 # expose minecraft port
