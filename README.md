@@ -1,4 +1,4 @@
-## Minecraft server SPIGOT on Ubuntu 14.04 with openjava 1.8
+## Minecraft server SPIGOT on Debian Jessie with Minecraft 1.8
 
 This docker image builds and runs the spigot version of minecraft. 
 
