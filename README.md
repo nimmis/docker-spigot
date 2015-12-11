@@ -1,4 +1,6 @@
-## Minecraft server SPIGIT on Ubuntu 14.04 with openjava 1.8
+## Minecraft server SPIGOT on Ubuntu 14.04 with openjava 1.8
+This project is a fork of nimmis/spigot with performance improvements and changes.
+
 
 This docker image builds and runs the spigot version of minecraft. 
 
@@ -46,4 +48,5 @@ to drop back to a root shell in the minecraft directory. Edit and add files in /
 ## Future features
 
 This is the initial release of this, more features to come.....
+
 
