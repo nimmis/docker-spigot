@@ -1,4 +1,4 @@
-FROM skardoska/java
+FROM skardoska/debian-java
 
 MAINTAINER skardoska <koen253janssen@gmail.com>
 
