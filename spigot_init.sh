@@ -17,7 +17,7 @@ if [ ! -f /$SPIGOT_HOME/spigot.jar ]; then
   cd /$SPIGOT_HOME/build
   wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
   HOME=/$SPIGOT_HOME/build java -jar BuildTools.jar
-  cp /$SPIGOT_HOME/build/Spigot/Spigot-Server/target/spigot-1.8*.jar /$SPIGOT_HOME/spigot.jar
+  cp /$SPIGOT_HOME/build/Spigot/Spigot-Server/target/spigot-1.*.jar /$SPIGOT_HOME/spigot.jar
 
   #accept eola
   echo "eula=true" > /$SPIGOT_HOME/eula.txt
