@@ -30,7 +30,3 @@ chown -R minecraft.minecraft /$SPIGOT_HOME/
 
 cd /$SPIGOT_HOME/
 su - minecraft -c 'java -Xms512M -Xmx1536M -XX:MaxPermSize=128M -jar spigot.jar'
-
-# fallback to root and run shell if spigot don't start/forced exit
-bash
-
