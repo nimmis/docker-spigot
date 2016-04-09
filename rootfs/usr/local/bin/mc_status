@@ -1,0 +1,11 @@
+#!/bin/sh
+###########################################################
+#
+# script to show status of spigot process
+#
+# (c) 2016 nimmis <kjell.havneskold@gmail.com>
+#
+###########################################################
+
+supervisorctl status spigot
+

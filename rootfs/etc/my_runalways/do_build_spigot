@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/etc/init.d/minecraft_server create $SPIGOT_VER >> /var/log/startup.log

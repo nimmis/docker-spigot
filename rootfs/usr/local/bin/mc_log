@@ -1,0 +1,10 @@
+#!/bin/bash
+###########################################################
+#
+# script to track spigot log
+#
+# (c) 2016 nimmis <kjell.havneskold@gmail.com>
+#
+###########################################################
+
+/etc/init.d/minecraft_server log

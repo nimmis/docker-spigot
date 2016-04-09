@@ -1,0 +1,12 @@
+#!/bin/bash
+###########################################################
+#
+# script to send command to spigot
+#
+# (c) 2016 nimmis <kjell.havneskold@gmail.com>
+#
+###########################################################
+
+echo "/etc/init.d/minecraft_server send \"$1\""
+/etc/init.d/minecraft_server send "$1"
+mc_log

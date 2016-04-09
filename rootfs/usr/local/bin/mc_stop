@@ -1,0 +1,11 @@
+#!/bin/sh
+###########################################################
+#
+# script to stop spigot process
+#
+# (c) 2016 nimmis <kjell.havneskold@gmail.com>
+#
+###########################################################
+
+supervisorctl stop spigot
+

@@ -1,0 +1,11 @@
+#!/bin/sh
+###########################################################
+#
+# script to start spigot process
+#
+# (c) 2016 nimmis <kjell.havneskold@gmail.com>
+#
+###########################################################
+
+supervisorctl start spigot
+
