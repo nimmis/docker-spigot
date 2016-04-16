@@ -102,7 +102,7 @@ To get an output of the latest events from the spigot server type
 
 	docker exec spigot2 mc_log
 
-and you will se the last 10 lines from the output, this is what you will se after startup
+and you will see the last 10 lines from the output, this is what you will see after startup
 
 	Abort with CTRL-C
 	[13:02:15 INFO]: Zombie Aggressive Towards Villager: true
