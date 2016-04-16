@@ -100,7 +100,7 @@ the webpage for [BuildTools](https://www.spigotmc.org/wiki/buildtools/#versions)
 
 To get an output of the latest events from the spigot server type
 
-	docker exec spigot2 mc_log
+	docker exec spigot mc_log
 
 and you will see the last 10 lines from the output, this is what you will see after startup
 
