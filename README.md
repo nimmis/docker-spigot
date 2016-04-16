@@ -8,7 +8,7 @@ released minecraft.jar
 
 This is a new version of this container where I have removed the script started at the en and set it up to run spigot as a deamon
 with the help of supervisord. See my Ubuntu container for a more detailed description of my implementation of an init-process in
-ubuntu, se [nimmis/ubuntu](https://hub.docker.com/r/nimmis/ubuntu/)
+ubuntu, see [nimmis/ubuntu](https://hub.docker.com/r/nimmis/ubuntu/)
 
 Whats new is
 - selectable spigot version
@@ -66,7 +66,7 @@ the name spigot)
 
 	docker logs -f spigot
 
-Then the compilation is completed the server will start and you will se somethine like
+Then the compilation is completed the server will start and you will see somethine like
 
 
 	2016-04-09 12:37:45,392 CRIT Set uid to user 0
@@ -102,7 +102,7 @@ To get an output of the latest events from the spigot server type
 
 	docker exec spigot2 mc_log
 
-and you will se the last 10 lines from the output, this is what you will se after startup
+and you will see the last 10 lines from the output, this is what you will see after startup
 
 	Abort with CTRL-C
 	[13:02:15 INFO]: Zombie Aggressive Towards Villager: true
