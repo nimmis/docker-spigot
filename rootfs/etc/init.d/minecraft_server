@@ -14,10 +14,25 @@
 # (c) 2015-2016 nimmis <kjell.havneskold@gmail.com>
 #
 
+# fetch global variables when starting from supervisord
+
+. /etc/container_environment.sh
+
+
 MC_USER=minecraft       # User name running the minecraft server
 MC_PROC=spigot.jar   # name of minecraft jar file
 MC_DIR=/minecraft/ # Directory where the server should run
-MC_JAVA_OPS='-Xmx1G -Xms1G'   # java options for minecraft server
+
+if [ -z "$MC_MAXMEM" ]; then
+  MC_MAXMEM="1G"
+fi
+
+if [ -z  "$MC_MINMEM" ]; then
+  MC_MINMEM=$MC_MEM ;
+fi
+
+
+MC_JAVA_OPS="-Xmx$MC_MAXMEM -Xms$MC_MINMEM"   # java options for minecraft server
 
 JAVACMD=$(which java)
 
@@ -188,13 +203,15 @@ buildjar() {
   if [ ! -f /$SPIGOT_HOME/spigot-$1.jar ]; then
     echo "Building spigot version ($1) jar file, be patient"
     if [ -d /$SPIGOT_HOME/build ]; then
-	execCMD "rm -Rf /$SPIGOT_HOME/build"
+	rm -Rf /$SPIGOT_HOME/build
     fi
-    execCMD "mkdir -p /$SPIGOT_HOME/build"
-    execCMD "wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar -O /$SPIGOT_HOME/build/BuildTools.jar"
-    cd /$SPIGOT_HOME/build;
+    mkdir -p /$SPIGOT_HOME/build
+    wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar -O /$SPIGOT_HOME/build/BuildTools.jar
+    HOME=/$SPIGOT_HOME/build
+    export HOME
+    cd $HOME
     git config --global --unset core.autocrlf
-    HOME=/$SPIGOT_HOME/build java -jar BuildTools.jar --rev $1
+    java -jar BuildTools.jar --rev $1
     cp /$SPIGOT_HOME/build/Spigot/Spigot-Server/target/spigot-*.jar /$SPIGOT_HOME/spigot-$1.jar
     cd /$SPIGOT_HOME/
     rm -Rf /$SPIGOT_HOME/build
