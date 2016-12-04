@@ -1,16 +1,17 @@
 ## Minecraft server SPIGIT on Ubuntu 14.04 with openjava 1.8
-[![Docker Hub; nimmis/spigot](https://img.shields.io/badge/dockerhub-nimmis%2Fspigot-green.svg)](https://registry.hub.docker.com/u/nimmis/spigot)
+[![](https://images.microbadger.com/badges/image/nimmis/spigot.svg)](https://microbadger.com/images/nimmis/spigot "Get your own image badge on microbadger.com")
 
 This docker image builds and runs the spigot version of minecraft. 
 
 If the spigot.jar is not found in the minecraft directory the system pulls down BuildTool and build a new spigot.jar from the latest
 released minecraft.jar
 
-This is a new version of this container where I have removed the script started at the en and set it up to run spigot as a deamon
-with the help of supervisord. See my Ubuntu container for a more detailed description of my implementation of an init-process in
-ubuntu, see [nimmis/ubuntu](https://hub.docker.com/r/nimmis/ubuntu/)
+Each time the container is started the presens of the file /minecraft/spigot.jar, if the file is missing a build of spigot.jar is started.
+
+The spigot daemin is started with superovisord, see my Ubuntu container for a more detailed description of my implementation of an init-process in ubuntu, see [nimmis/ubuntu](https://hub.docker.com/r/nimmis/ubuntu/)
 
 Whats new is
+- selectable memoy size for the java process
 - selectable spigot version
 - do a nice shutdown of the server when the docker stop command is issued
 - docker accessable commands to 
@@ -65,15 +66,32 @@ you can follow the output from the compilation with then command (assume that yo
 the name spigot)
 
 	docker logs -f spigot
+    *** open logfile
+    *** Run files in /etc/my_runonce/
+    *** Running /etc/my_runonce/set_timezone...
+    *** Run files in /etc/my_runalways/
+    *** Running /etc/my_runalways/do_build_spigot...
+    --2016-12-04 13:17:37--  https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+    Resolving hub.spigotmc.org (hub.spigotmc.org)... 104.27.195.96, 104.27.194.96, 2400:cb00:2048:1::681b:c360, ...
+    Connecting to hub.spigotmc.org (hub.spigotmc.org)|104.27.195.96|:443... connected.
+    HTTP request sent, awaiting response... 200 OK
 
 Then the compilation is completed the server will start and you will see somethine like
 
+    *** Log: Success! Everything compiled successfully. Copying final .jar files now.
+    *** Log: Copying craftbukkit-1.11-R0.1-SNAPSHOT.jar to /minecraft/build/.
+    *** Log:   - Saved as craftbukkit-1.11.jar
+    *** Log: Copying spigot-1.11-R0.1-SNAPSHOT.jar to /minecraft/build/.
+    *** Log:   - Saved as spigot-1.11.jar
+    *** Running /etc/my_runalways/eula...
+    *** Running /etc/rc.local...
+    *** Booting supervisor daemon...
+    *** Supervisor started as PID 4820
+    *** Started processes via Supervisor......
+    crond                            RUNNING    pid 4824, uptime 0:00:03
+    spigot                           RUNNING    pid 4825, uptime 0:00:03
+    syslog-ng                        RUNNING    pid 4823, uptime 0:00:03
 
-	2016-04-09 12:37:45,392 CRIT Set uid to user 0
-	*** Started processes via Supervisor......
-	crond                            RUNNING    pid 28, uptime 0:00:04
-	spigot                           RUNNING    pid 29, uptime 0:00:04
-	syslog-ng                        RUNNING    pid 27, uptime 0:00:04
 
 
 you can then exit from the log with CTRL-C
@@ -95,7 +113,23 @@ to the docker run line.
 
 The following version is atm avaliable 1.8, 1.8.3, 1.8.7, 1.8.8, 1.9, 1.9.2 and latest. Please check
 the webpage for [BuildTools](https://www.spigotmc.org/wiki/buildtools/#versions) to get the latest information. 
- 
+
+### setup memmory to use
+
+There are two environmentvariables to set maximim and initial memory for spigot.
+
+#### MC_MAXMEM
+
+Sets the maximum memory to use <size>m for Mb or <size>g for Gb, if this parameter is not set 1 Gb is choosen, to set the maximum memory to 2 Gb
+
+    -e MC_MAXMEM=2g
+
+#### MC_MINMEM
+
+sets the initial memory reservation used, use <size>m for Mb or <size>g for Gb, if this paramter is not set, it is set to MC_MAXMEM, to set the initial size t0 512 Mb
+
+    -e MC_MINMEM=512m
+    
 ## look at the last output from the spigot server
 
 To get an output of the latest events from the spigot server type
@@ -192,3 +226,4 @@ To attach the minecraft directory in the container to directory /home/nimmis/mc-
 - automatic backup
 - plugins
 - more....
+
