@@ -28,7 +28,7 @@ if [ -z "$MC_MAXMEM" ]; then
 fi
 
 if [ -z  "$MC_MINMEM" ]; then
-  MC_MINMEM=$MC_MEM ;
+  MC_MINMEM=$MC_MAXMEM ;
 fi
 
 
