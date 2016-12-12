@@ -1,5 +1,3 @@
 #!/bin/bash
 
-. /etc/container_environment.sh
-
-/etc/init.d/minecraft_server create $SPIGOT_VER >> /var/log/startup.log
+/etc/init.d/minecraft_server create $SPIGOT_VER 
