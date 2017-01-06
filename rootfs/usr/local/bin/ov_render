@@ -5,7 +5,7 @@
 #
 ###########################################################
 
-Script="/usr/bin/overviewer.py --config=/overviewer/overviewer.cfg --verbose"
+Script="nice -n 19 /usr/bin/overviewer.py --config=/overviewer/overviewer.cfg --verbose"
 LogFile="/overviewer/logs/overviewer.log"
 ArchiveDir="/overviewer/logs/archive"
 MaxFileSizeInMb="2"
