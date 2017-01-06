@@ -1,0 +1,26 @@
+#!/bin/bash
+###########################################################
+#
+# mc world backup script
+#
+###########################################################
+
+mc_send_once "Shutting down in 5 minutes to backup the world."
+mc_send_once "Backup should only take a couple minutes."
+#sleep 240
+sleep 1
+mc_send_once "Shutting down in 1 minute to backup the world..."
+mc_send_once "Backup should only take a couple minutes."
+# sleep 60
+sleep 1
+mc_send_once "Shutting down NOW to backup the world."
+mc_send_once "Backup should only take a couple minutes."
+mc_send_once "Bye now!"
+sleep 5
+
+mc_stop
+
+mkdir -p /minecraft/backup
+tar zcvf /minecraft/backup/worldbackup-"$(date +%Y-%m-%d-%H%M)".tar.gz /minecraft/world*
+
+mc_start

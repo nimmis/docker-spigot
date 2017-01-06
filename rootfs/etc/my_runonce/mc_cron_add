@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# add mc_backup to crontab
+
+if [ "$(grep "minecraft mc_backup" < /etc/crontab)" ] ; then
+  
+  	echo "mc_backup already in crontab"
+
+else
+
+  	echo "mc_backup not in crontab, adding."
+	echo "0 17 * * * minecraft mc_backup" >> /etc/crontab
+
+fi

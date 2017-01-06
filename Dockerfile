@@ -11,14 +11,17 @@ ENV SPIGOT_VER latest
 # add extra files needed
 COPY rootfs /
 
-# add some needed commands 
-RUN apt-get update && apt-get install -y wget git && apt-get clean all
+# add overviewer repository & key
+RUN echo "deb http://overviewer.org/debian ./" >> /etc/apt/sources.list && curl http://overviewer.org/debian/overviewer.gpg.asc | sudo apt-key add -
 
-# Make special user for minecraft to run in
+# add some needed commands, including nginx & overviewer
+RUN apt-get update && apt-get install -y wget git nginx minecraft-overviewer && apt-get clean all
 
+# Make special user for minecraft & overviewer to run in
 RUN useradd -s /bin/bash -d /minecraft -m minecraft
 
 # expose minecraft port
 EXPOSE 25565
 
-
+# expose nginx port for overviewer
+EXPOSE 80

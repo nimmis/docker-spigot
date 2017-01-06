@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# add ov_render to crontab
+
+if [ "$(grep "minecraft ov_render" < /etc/crontab)" ] ; then
+  
+  	echo "ov_render already in crontab"
+
+else
+
+  	echo "ov_render not in crontab, adding."
+	echo "0,30 * * * * minecraft ov_render" >> /etc/crontab
+
+fi
