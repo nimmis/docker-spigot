@@ -1,0 +1,66 @@
+#!/bin/sh
+#
+# script to check and correct missmatch between
+# UID for the directory /minecraft and the
+# user that runs minecraft (minecraft)
+#
+# (c) 2017 nimmis <kjell.havneskold@gmail.com>
+#
+
+#
+# set_mcuid <minecraft UID>
+#
+# sets a new UID for the user minecraft in 
+# the file /etc/passwd
+#
+#
+set_mcuid() {
+
+  if [ "a$1" = "a" ]; then
+
+    echo "Cannot set empy UID for minecraft user"
+    exit 1
+
+  fi
+
+  # change UID for minecraft user
+  sed -i "s/^minecraft.*/minecraft:x:$1:1000::\/minecraft:\/bin\/bash/g" /etc/passwd
+  
+}
+
+# get info about owners UID of the directory /minecraft
+MCDIR_OWNER=$(ls -ldn /minecraft | awk '{print $3}')
+
+# get info of the UID for the user minecraft
+MC_UID=$(grep ^minecraft /etc/passwd | awk -F ':' '{print $3}')
+
+# 
+# if SPIGOT_UID is set, set that UID for the user minecraft
+#
+
+if [ -n "$SPIGOT_UID" ]; then
+
+  echo "Force change UID of minecraft user to UID $SPIGOT_UID"
+
+  set_mcuid $SPIGOT_UID
+  MC_UID=$SPIGOT_UID
+
+else
+
+  #
+  # automatically change UID of minecraft user to reflect owner 
+  # of the directory /minecraft
+  #
+
+  if [ ! "$MCDIR_OWNER" = "$MC_UID" ]; then
+
+    echo "missmatch between directory owner and minecraft user"
+    echo "Changed owner if minecraft to UID $MCDIR_OWNER"
+
+    set_mcuid $MCDIR_OWNER
+    MC_UID=$MCDIR_OWNER
+
+  fi
+
+fi
+
