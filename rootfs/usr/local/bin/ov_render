@@ -18,6 +18,7 @@ if [ -z "$(pgrep overviewer.py)" ];then
 	mc_send_once "say Updating the map..."
 	
 	$Script >> $LogFile
+	sed -i "s/\?sensor=false/&\&key=$GOOGLE_MAPS_KEY/g" /usr/share/nginx/html/index.html
 
 	FileSize=$(du -m $LogFile | tr -s '\t' ' ' | cut -d' ' -f1)
 	

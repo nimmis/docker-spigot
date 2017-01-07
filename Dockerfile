@@ -12,7 +12,7 @@ ENV SPIGOT_VER latest
 COPY rootfs /
 
 # add overviewer repository & key
-RUN echo "deb http://overviewer.org/debian ./" >> /etc/apt/sources.list && curl http://overviewer.org/debian/overviewer.gpg.asc | sudo apt-key add -
+RUN echo "deb http://overviewer.org/debian ./" >> /etc/apt/sources.list && curl http://overviewer.org/debian/overviewer.gpg.asc | apt-key add -
 
 # add some needed commands, including nginx & overviewer
 RUN apt-get update && apt-get install -y wget git nginx minecraft-overviewer && apt-get clean all
