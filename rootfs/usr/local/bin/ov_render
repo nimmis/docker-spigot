@@ -1,41 +1,76 @@
 #!/bin/sh
-###########################################################
+############################################################
 #
-# script to render overviewer
+# script to render overviewer or generate points of interest
 #
-###########################################################
+############################################################
 
-Script="nice -n 19 /usr/bin/overviewer.py --config=/overviewer/overviewer.cfg --verbose"
+Script="nice -n 19 /usr/bin/overviewer.py --config=/overviewer/overviewer.cfg"
+Action="Render"
 LogFile="/overviewer/logs/overviewer.log"
 ArchiveDir="/overviewer/logs/archive"
 MaxFileSizeInMb="2"
 
+if [ "minecraft" != "$(whoami)" ] ; then
+    echo "This script must be run as minecraft user." 1>&2
+    exit 1
+fi
+
+while test $# -gt 0; do
+    case "$1" in
+        -gp)
+            Script="$Script --genpoi"
+            Action="GenPoi"
+            shift
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
 mkdir -p $ArchiveDir
 touch $LogFile
+printf "\n%s INFO] STARTING ov_render\n" "$(date "+%Y%m%d %H:%M:%S")" >> $LogFile
 
 if [ -z "$(pgrep overviewer.py)" ];then
 
-	mc_send_once "say Updating the map..."
-	
-	$Script >> $LogFile
-	sed -i "s/\?sensor=false/&\&key=$GOOGLE_MAPS_KEY/g" /usr/share/nginx/html/index.html
+    if [ $Action = "Render" ];then
+        printf "%s INFO] Updating Map blocks...\n" "$(date "+%Y%m%d %H:%M:%S")" >> $LogFile
+        printf "%s INFO] Google maps key: %s\n" "$(date "+%Y%m%d %H:%M:%S")" "$GOOGLE_MAPS_KEY" >> $LogFile
+    fi
+    
+    if [ $Action = "GenPoi" ];then
+        printf "%s INFO] Updating map POIs...\n" "$(date "+%Y%m%d %H:%M:%S")" >> $LogFile
+    fi
+    
+    $Script >> $LogFile
+    
+    if [ $Action = "Render" ];then
+        printf "%s INFO] Before Update: %s\n" "$(date "+%Y%m%d %H:%M:%S")" "$(grep sensor=false /usr/share/nginx/html/index.html)" >> $LogFile
+        ov_keyfix >> $LogFile
+        printf "%s INFO] After Update:  %s\n" "$(date "+%Y%m%d %H:%M:%S")" "$(grep sensor=false /usr/share/nginx/html/index.html)" >> $LogFile
+    fi
 
-	FileSize=$(du -m $LogFile | tr -s '\t' ' ' | cut -d' ' -f1)
-	
-	if [ "$FileSize" -gt $MaxFileSizeInMb ];then   
-	
-		Timestamp=$(date "+%Y%m%d_%H%M%S")
-		mv $LogFile $LogFile."$Timestamp"
-		mv $LogFile."$Timestamp" $ArchiveDir
-		touch $LogFile
-		
-	fi
-	
-	mc_send_once "say Map update complete!"
+    FileSize=$(du -m $LogFile | tr -s '\t' ' ' | cut -d' ' -f1)
+
+    if [ "$FileSize" -gt $MaxFileSizeInMb ];then
+        Timestamp=$(date "+%Y%m%d %H:%M:%S")
+        mv $LogFile $LogFile."$Timestamp"
+        mv $LogFile."$Timestamp" $ArchiveDir
+        touch $LogFile
+    fi
+
+    if [ $Action = "Render" ];then
+        mc_send_once "say Map blocks updated!"
+        echo "$(date "+%Y%m%d %H:%M:%S") INFO] Map block update complete!" >> $LogFile
+    fi
+    
+    if [ $Action = "GenPoi" ];then
+        mc_send_once "say Map points of interest updated!"
+        echo "$(date "+%Y%m%d %H:%M:%S") INFO] Map POI update complete!" >> $LogFile
+    fi
 
 else
-	
-	Timestamp=$(date "+%Y%m%d_%H%M%S")
-	echo "$Timestamp ERROR] overviewer.py already running. Not performing another scan." >> $LogFile
-
+    echo "$(date "+%Y%m%d %H:%M:%S") ERROR] overviewer.py already running. Not performing another scan." >> $LogFile
 fi

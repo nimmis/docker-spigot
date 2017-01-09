@@ -9,6 +9,6 @@ if [ "$(grep "minecraft mc_backup" < /etc/crontab)" ] ; then
 else
 
   	echo "mc_backup not in crontab, adding."
-	echo "0 17 * * * minecraft mc_backup" >> /etc/crontab
+	echo "30 16 * * * minecraft mc_backup >> /tmp/crontab.log 2>&1" >> /etc/crontab
 
 fi

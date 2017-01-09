@@ -402,7 +402,7 @@ case "$1" in
 
   log)
      echo "Abort with CTRL-C"
-     tail -f $MC_DIR/output.con
+     tail -f -n 50 $MC_DIR/output.con
   ;;
 
   console)
