@@ -1,6 +1,8 @@
-# Minecraft server Spigot & Overviewer
+# Docker image with Minecraft (Spigot server) & Overviewer (Mapping)
 
 This docker image builds and runs the spigot version of minecraft. It deploys overviewer within the same container to view your minecraft map.
+
+![Image of a minecraft overworld map rendered in overviewer showing player locations](http://i.imgur.com/846ALCA.png)
 
 All credit to [nimmis](https://github.com/nimmis). This image build upon their work and haphazidly adds overviewer plus some automation. Please see their [README.md](https://github.com/nimmis/docker-spigot) for more info.
 
