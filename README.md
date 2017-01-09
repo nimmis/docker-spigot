@@ -46,7 +46,7 @@ All credit to [nimmis](https://github.com/nimmis). This image build upon their w
 
 When ready, run:
 
-    docker run -d -p 25565:25565 -p 80:80 -e EULA=true -e MC_MAXMEM=<--replace with megabytes-->m -e GOOGLE_MAPS_KEY=<--replace with your google maps key--> --name mcserver docker_spigot_overviewer
+`docker run -d -p 25565:25565 -p 80:80 -e EULA=true -e MC_MAXMEM=<--replace with megabytes-->m -e GOOGLE_MAPS_KEY=<--replace with your google maps key--> --name mcserver docker_spigot_overviewer`
 
 Further information about the docker run command: 
 
