@@ -21,32 +21,41 @@ All credit to [nimmis](https://github.com/nimmis). This image build upon their w
 **This is important and you only need to do it once.**
 
 1) You need your own Google Maps API key. Click this link: https://developers.google.com/maps/documentation/javascript/get-api-key and follow the instructions.
+
 2) [Install docker](https://docs.docker.com/engine/installation/)
+
 3) Clone this repo and then run:
 
         docker build -t docker_spigot_overviewer .
+	
+4) Subsitute these values into the command below.
     
-2) Subsitute these values into the command below.
-    - Add your key to:
-        - `GOOGLE_MAPS_KEY=<--replace with your google maps key-->`, for example, `GOOGLE_MAPS_KEY=abcdefg-H1J2Lm4PQ-dscasdwqeqweb321321Jn`.
-    - Specify how much memory the minecraft server can utilise
-        - `MC_MAXMEM=<--megabytes-->m`, for example, `MC_MAXMEM=1500m`
+- Add your key to:
+    
+    - `GOOGLE_MAPS_KEY=<--replace with your google maps key-->`, for example, `GOOGLE_MAPS_KEY=abcdefg-H1J2Lm4PQ-dscasdwqeqweb321321Jn`.
+	
+- Specify how much memory the minecraft server can utilise
+    
+    - `MC_MAXMEM=<--megabytes-->m`, for example, `MC_MAXMEM=1500m`
+	
         or
-        - `MC_MAXMEM=<--gigabytes-->g`, for example, `MC_MAXMEM=4g`
+	
+    - `MC_MAXMEM=<--gigabytes-->g`, for example, `MC_MAXMEM=4g`
 
 When ready, run:
 
     docker run -d -p 25565:25565 -p 80:80 -e EULA=true -e MC_MAXMEM=<--replace with megabytes-->m -e GOOGLE_MAPS_KEY=<--replace with your google maps key--> --name mcserver docker_spigot_overviewer
 
 Further information about the docker run command: 
+
 |Argument|Description|
 |---|---|
-|-p 25565:25565|Required. Opens the port minecraft uses for gameplay|
-|-p 80:80|Required. Opens the http port so you can access Overviewer|
-|-e GOOGLE_MAPS_KEY=<--replace with your google maps key-->|Required. You must add your own API key (which you can obtain from the link above) other overviewer **will not work**.
-|-e EULA=true|Required. By adding arguemnt this you're accepting the [Minecraft EULA](https://account.mojang.com/documents/minecraft_eula).|
-|-e MC_MAXMEM=<--megabytes-->m|Sets the maximum memory to use <size>m for Mb or <size>g for Gb, if this parameter is not set 1 Gb is chosen.
-|--name mcserver|Names this docker container 'mcserver' so it's easier to address later.|
+|`-p 25565:25565`|Required. Opens the port minecraft uses for gameplay|
+|`-p 80:80`|Required. Opens the http port so you can access Overviewer|
+|`-e GOOGLE_MAPS_KEY=<--replace with your google maps key-->`|Required. You must add your own API key (which you can obtain from the link above) other overviewer **will not work**.
+|`-e EULA=true`|Required. By adding arguemnt this you're accepting the [Minecraft EULA](https://account.mojang.com/documents/minecraft_eula).|
+|`-e MC_MAXMEM=<--megabytes-->m`|Sets the maximum memory to use <size>m for Mb or <size>g for Gb, if this parameter is not set 1 Gb is chosen.
+|`--name mcserver`|Names this docker container 'mcserver' so it's easier to address later.|
 
 ### First time run
 
