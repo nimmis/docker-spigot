@@ -1,72 +1,61 @@
-## Minecraft server SPIGIT on Ubuntu 16.04 with openjava 1.8
-[![](https://images.microbadger.com/badges/image/nimmis/spigot.svg)](https://microbadger.com/images/nimmis/spigot "Get your own image badge on microbadger.com")
+# Minecraft server Spigot & Overviewer
 
-This docker image builds and runs the spigot version of minecraft. 
+This docker image builds and runs the spigot version of minecraft. It deploys overviewer within the same container to view your minecraft map.
 
-If the spigot.jar is not found in the minecraft directory the system pulls down BuildTool and build a new spigot.jar from the latest
-released minecraft.jar
+All credit to [nimmis](https://github.com/nimmis). This image build upon their work and haphazidly adds overviewer plus some automation. Please see their [README.md](https://github.com/nimmis/docker-spigot) for more info.
 
-Each time the container is started the presence of the file /minecraft/spigot.jar, if the file is missing a build of spigot.jar is started.
+### What's included?
 
-The spigot daemon is started with superovisord, see my Ubuntu container for a more detailed description of my implementation of an init-process in ubuntu, see [nimmis/ubuntu](https://hub.docker.com/r/nimmis/ubuntu/)
+- [Spigot](https://www.spigotmc.org) Minecraft server.
+    - The latest version is downloaded upon first run.
+- [Overviewer](https://overviewer.org/) mapping.
+    - Player locations shown by default
+    - In-game [signs](http://minecraft.gamepedia.com/Sign) with the first row of text set to "!" can be shown or hidden.
+- Automatic Overviewer map refreshes every 30 mins, with player locations and signs every 10 minutes.
+    - To be clear, player locations are not real time.
+- Automatic Minecraft world backups.
+    - Saved to a tar.gz file, must be manually exported from the container.
 
-Whats new is
-- adjust minecraft user UID to match mounted volume
-- selectable memory size for the Java process
-- selectable spigot version
-- do a nice shutdown of the server when the docker stop command is issued
-- docker accessible commands to 
-   - start/stop/restart the spigot server
-   - send console commands to the server
-   - look at console output from the server
-- 
+### Generating the container for the first time.
 
-## Why not a precompiled version of spigot is included
+**This is important and you only need to do it once.**
 
-Due to legal reasons you can build it yourself but you can't redistribute the finished jar file.
+1) You need your own Google Maps API key. Click this link: https://developers.google.com/maps/documentation/javascript/get-api-key and follow the instructions.
+2) [Install docker](https://docs.docker.com/engine/installation/)
+3) Clone this repo and then run:
 
-## Starting the container
+        docker build -t docker_spigot_overviewer .
+    
+2) Subsitute these values into the command below.
+    - Add your key to:
+        - `GOOGLE_MAPS_KEY=<--replace with your google maps key-->`, for example, `GOOGLE_MAPS_KEY=abcdefg-H1J2Lm4PQ-dscasdwqeqweb321321Jn`.
+    - Specify how much memory the minecraft server can utilise
+        - `MC_MAXMEM=<--megabytes-->m`, for example, `MC_MAXMEM=1500m`
+        or
+        - `MC_MAXMEM=<--gigabytes-->g`, for example, `MC_MAXMEM=4g`
 
-To run the latest stable version of this docker image run
+When ready, run:
 
-	docker run -d -p 25565:25565 -e EULA=true nimmis/spigot
+    docker run -d -p 25565:25565 -p 80:80 -e EULA=true -e MC_MAXMEM=<--replace with megabytes-->m -e GOOGLE_MAPS_KEY=<--replace with your google maps key--> --name mcserver docker_spigot_overviewer
 
-the parameter
+Further information about the docker run command: 
+|Argument|Description|
+|---|---|
+|-p 25565:25565|Required. Opens the port minecraft uses for gameplay|
+|-p 80:80|Required. Opens the http port so you can access Overviewer|
+|-e GOOGLE_MAPS_KEY=<--replace with your google maps key-->|Required. You must add your own API key (which you can obtain from the link above) other overviewer **will not work**.
+|-e EULA=true|Required. By adding arguemnt this you're accepting the [Minecraft EULA](https://account.mojang.com/documents/minecraft_eula).|
+|-e MC_MAXMEM=<--megabytes-->m|Sets the maximum memory to use <size>m for Mb or <size>g for Gb, if this parameter is not set 1 Gb is chosen.
+|--name mcserver|Names this docker container 'mcserver' so it's easier to address later.|
 
-	-e EULA=true
+### First time run
 
-The is because Mojang now requires the end user to access their EULA, located at
-https://account.mojang.com/documents/minecraft_eula, the be able to start the server.
+The first run will take a couple of minutes depending on computer and network speed. It pulls down the latest version of BuildTools and builds a spigot.jar from the selected minecraft version. This is done in numerous steps so please be patient. 
 
-the parameter
+You can follow the output from the compilation with the command:
 
-	-p 25565:25565
+	# docker logs -f mcserver
 
-tell on witch external port the internal 25565 should be connected, in this case the same, if
-you only type -p 25565 it will connect to a random port on the machine
-
-## Giving the container a name
-
-To make it easier to handle you container you can give it a name instead of the long
-number thats normally give to it, add a
-
-	--name spigot
-
-to the run command to give it the name minecraft, then you can start it easier with
-
-	docker start spigot
-	docker stop spigot
-
-## First time run
-
-This will take a couple of minutes depending on computer and network speed. It will pull down
-the selected version on BuildTools and build a spigot.jar from the selected minecraft version.
-This is done in numerous steps so be patient. 
-
-you can follow the output from the compilation with then command (assume that you given the container
-the name spigot)
-
-	docker logs -f spigot
     *** open logfile
     *** Run files in /etc/my_runonce/
     *** Running /etc/my_runonce/set_timezone...
@@ -77,7 +66,7 @@ the name spigot)
     Connecting to hub.spigotmc.org (hub.spigotmc.org)|104.27.195.96|:443... connected.
     HTTP request sent, awaiting response... 200 OK
 
-Then the compilation is completed the server will start and you will see something like
+When the compilation is complete your minecraft server will start and you will see something like:
 
     *** Log: Success! Everything compiled successfully. Copying final .jar files now.
     *** Log: Copying craftbukkit-1.11-R0.1-SNAPSHOT.jar to /minecraft/build/.
@@ -93,50 +82,25 @@ Then the compilation is completed the server will start and you will see somethi
     spigot                           RUNNING    pid 4825, uptime 0:00:03
     syslog-ng                        RUNNING    pid 4823, uptime 0:00:03
 
+Exit the log by pressing CTRL-C.
 
 
-you can then exit from the log with CTRL-C
+## Starting & Stopping
 
-### Selecting version to compile
+After the inital run you can start and stop the entire container via:
 
-If you don't specify it will always compile the latest version but if you want a specific version you can specify it by adding
+	docker start mcserver
+	docker stop mcserver
 
-	-e SPIGOT_VER <version>
 
-where <version> is the version you would like to use, to build it with version 1.8 add
+## Useful Commands
 
-	-e SPIGOT_VER 1.8
+### Logs 
+To get details of the latest events from the minecraft spigot server type
 
-to the docker run line.
+	docker exec mcserver mc_log
 
-#### versions available
-
-The following version is atm avaliable 1.8, 1.8.3, 1.8.7, 1.8.8, 1.9, 1.9.2 and latest. Please check
-the web page for [BuildTools](https://www.spigotmc.org/wiki/buildtools/#versions) to get the latest information. 
-
-### setup memory to use
-
-There are two environment variables to set maximum and initial memory for spigot.
-
-#### MC_MAXMEM
-
-Sets the maximum memory to use <size>m for Mb or <size>g for Gb, if this parameter is not set 1 Gb is chosen, to set the maximum memory to 2 Gb
-
-    -e MC_MAXMEM=2g
-
-#### MC_MINMEM
-
-sets the initial memory reservation used, use <size>m for Mb or <size>g for Gb, if this parameter is not set, it is set to MC_MAXMEM, to set the initial size t0 512 Mb
-
-    -e MC_MINMEM=512m
-    
-## look at the last output from the spigot server
-
-To get an output of the latest events from the spigot server type
-
-	docker exec spigot mc_log
-
-and you will see the last 10 lines from the output, this is what you will see after startup
+and you will be shown the latest logs, which will continue to update. For example:
 
 	Abort with CTRL-C
 	[13:02:15 INFO]: Zombie Aggressive Towards Villager: true
@@ -150,16 +114,34 @@ and you will see the last 10 lines from the output, this is what you will see af
 	[13:02:18 INFO]: Server permissions file permissions.yml is empty, ignoring it
 	[13:02:18 INFO]: Done (3.650s)! For help, type "help" or "?"
 
-It will continue to output everything from the console until you press CTRL-C 
+Exit the log by pressing CTRL-C.
 
-## sending commands to the server console
+To get details of the latest events from the overviewer processes type
 
-You don't need to have an interactive container to be able to send commands to the console. To send
-a command to set the time to day you type
+	docker exec mcserver ov_log
 
-	docker exec spigot mc_send "time set day"
+For example:
 
-If this was the first command issued after a start the output should look like
+    Abort with CTRL-C
+    20170109 22:05:01 INFO] STARTING ov_render
+    20170109 22:05:01 INFO] Updating map POIs...
+    2017-01-09 22:05:01  Looking for entities in <RegionSet regiondir='/minecraft/world/region'>
+    2017-01-09 22:05:12  Done.
+    2017-01-09 22:05:12  Loaded UUID cache from '/usr/share/nginx/html/uuidcache.dat' with 7 entries
+    2017-01-09 22:05:12  Done handling POIs
+    2017-01-09 22:05:12  Writing out javascript files
+    2017-01-09 22:05:12  Wrote UUID cache with 7 entries
+    2017-01-09 22:05:12  Done
+    20170109 22:05:12 INFO] Map POI update complete!
+
+
+### Sending commands to the Minecraft server console
+
+Use the mc_send command to send minecraft server console commands. For example:
+
+	docker exec mcserver mc_send "time set day"
+	
+And the output:
 
 	[13:02:15 INFO]: Zombie Aggressive Towards Villager: true
 	[13:02:15 INFO]: Experience Merge Radius: 3.0
@@ -173,84 +155,18 @@ If this was the first command issued after a start the output should look like
 	[13:02:18 INFO]: Done (3.650s)! For help, type "help" or "?"
 	[13:12:35 INFO]: Set the time to 1000
 
-It will continue to output everything from the console until you press CTRL-C
+This will show you the server's response to your command. For a full list of commands check the official [wiki](http://minecraft.gamepedia.com/Commands#Summary_of_commands). Exit the log by pressing CTRL-C.
 
-## starting and stopping the server
+## Starting and stopping the minecraft server
 
-To stop the server but not the container do
+To stop the minecraft server inside the container run
 
-	docker exec spigot mc_stop
+	docker exec mcserver mc_stop
 
-To start it after being stopped do
+To start it after being stopped:
 
-	docker exec spigot mc_start
+	docker exec mcserver mc_start
 
-Finally to restart it do
+Finally to restart it:
 
-	docker exec spiot mc_restart
-
-## stopping the container
-
-When the container is stopped with the command
-
-	docker stop spigot
-
-the spigot server is shutdown nicely with a console stop command to give it time to save everything before
-stopping the container. If you look in the output from the server this show
-
-	[13:01:51 INFO]: Stopping the server
-	[13:01:51 INFO]: Stopping server
-	[13:01:51 INFO]: Saving players
-	[13:01:51 INFO]: nimmis lost connection: Server closed
-	[13:01:51 INFO]: nimmis left the game.
-	[13:01:51 INFO]: Saving worlds
-	[13:01:51 INFO]: Saving chunks for level 'world'/Overworld
-	[13:01:51 INFO]: Saving chunks for level 'world_nether'/Nether
-	[13:01:51 INFO]: Saving chunks for level 'world_the_end'/The End
-
-## Having the minecraft files on the host machine
-
-If you delete the container all your filer in minecraft will be gone. To save them where it's
-easier to edit and do a backup of the files you can attach a directory from the host machine
-(where you run the docker command) and attach it to the local file system in the container.
-The syntax for it is
-
-	-v /host/path/to/dir:/container/path/to/dir
-
-To attach the minecraft directory in the container to directory /home/nimmis/mc-srv you add
-
-	-v /home/nimmis/mc-srv:/minecraft
-
-### problems with external mounted volumes
-
-When a external volume is mounted the UID of the owner of the volume may not match the UID of the minecraft user (1000). This can result in problems with write/read access to the files. 
-
-To address this problem a check is done between UID of the owner of /minecraft and the UID of the user minecraft. If there is a mismatch the UID of the minecraft user is changed to match the UID of the directory.
-
-If you don't want to do this and want to manually set the UID of the minecraft user there is a variable named SPIGOT_UID which defines the minecraft user UID, adding
-
-	-e SPIGOT_UID=1132
-
-sets the minecraft user UID to 1132.
-
-## Issues
-
-If you have any problems with or questions about this image, please contact us by submitting a ticket through a [GitHub issue](https://github.com/nimmis/docker-spigot/issues "GitHub issue")
-
-1. Look to see if someone already filled the bug, if not add a new one.
-2. Add a good title and description with the following information.
- - if possible an copy of the output from **cat /etc/BUILDS/*** from inside the container
- - any logs relevant for the problem
- - how the container was started (flags, environment variables, mounted volumes etc)
- - any other information that can be helpful
-
-## Contributing
-
-You are invited to contribute new features, fixes, or updates, large or small; we are always thrilled to receive pull requests, and do our best to process them as fast as we can.
-
-## Future features
-
-- automatic backup
-- plugins
-- more....
-
+	docker exec mcserver mc_restart
