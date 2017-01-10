@@ -17,10 +17,10 @@ do
         if [ -z "$(grep "$TestString$AddString" "$f")" ] ; then
             echo "$f doesn't have a key."
             sed -i "s/\?sensor=false/&\&key=$GOOGLE_MAPS_KEY/g" "$f"
-            printf "After adding: %s\n" grep "$TestString" "$f"
+            printf "After adding: %s\n" "$(grep "$TestString" "$f")"
         fi
     fi
     if [ "$(grep "$TestString$AddString" "$f")" ] ; then
-        printf "$f has a key, see here: %s\n" "$(grep "$TestString$AddString" $f)"
+        printf "$f has a key, see here: %s\n" "$(grep "$TestString$AddString" "$f")"
     fi
 done
