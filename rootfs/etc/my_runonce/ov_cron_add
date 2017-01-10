@@ -9,7 +9,7 @@ if [ "$(grep "ov_render" < /etc/crontab)" ] ; then
 else
 
   	echo "ov_render not in crontab, adding."
-	echo "0,30 * * * * minecraft . /minecraft/my_env.sh; ov_render >> /tmp/script.log 2>&1" >> /etc/crontab
-	echo "5,15,25,35,45,55 * * * * minecraft . /minecraft/my_env.sh; ov_render -gp >> /tmp/script.log 2>&1" >> /etc/crontab
+	echo "0,30 * * * * minecraft . /minecraft/my_env.sh; ov_render >> /tmp/crontab.log 2>&1" >> /etc/crontab
+	echo "5,15,25,35,45,55 * * * * minecraft . /minecraft/my_env.sh; ov_render -gp >> /tmp/crontab.log 2>&1" >> /etc/crontab
 
 fi
