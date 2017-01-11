@@ -1,0 +1,20 @@
+#!/bin/bash
+# start nginx
+
+# Not the best way to handle permissions, but meh.
+chown -R minecraft:minecraft /usr/share/nginx/html
+chmod -R 755 /usr/share/nginx/html
+
+
+if [ ! -f /run/nginx.pid ] ; then
+
+  echo "nginx not running, starting."
+  nginx
+  
+else
+
+  echo "nginx pid file found, already running, stoping then starting."
+  nginx -s stop
+  nginx
+  
+fi 

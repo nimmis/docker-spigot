@@ -1,0 +1,9 @@
+#!/bin/bash
+###########################################################
+#
+# script to track overviewer log
+#
+#########################################################
+
+echo "Abort with CTRL-C"
+tail -f -n 50 /overviewer/logs/overviewer.log

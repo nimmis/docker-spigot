@@ -10,6 +10,9 @@ ENV SPIGOT_HOME=/minecraft \
 # add extra files needed
 COPY rootfs /
 
+# add overviewer repository & key
+RUN echo "deb http://overviewer.org/debian ./" >> /etc/apt/sources.list && curl http://overviewer.org/debian/overviewer.gpg.asc | apt-key add -
+
 RUN apt-get update && \
 
     # upgrade OS
@@ -18,8 +21,8 @@ RUN apt-get update && \
     # Make info file about this build
     printf "Build of nimmis/spigot:latest, date: %s\n"  `date -u +"%Y-%m-%dT%H:%M:%SZ"` > /etc/BUILDS/spigot && \
 
-    # install application
-    apt-get install -y wget git && \
+    # install applications, including nginx & overviewer
+    apt-get install -y wget git nginx minecraft-overviewer && \
 
     # Make special user for minecraft to run in
     /usr/sbin/useradd -s /bin/bash -d /minecraft -m minecraft && \
@@ -27,8 +30,8 @@ RUN apt-get update && \
     # remove apt cache from image
     apt-get clean all
 
-
 # expose minecraft port
 EXPOSE 25565
 
-
+# expose nginx port for overviewer
+EXPOSE 80

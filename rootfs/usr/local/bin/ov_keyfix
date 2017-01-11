@@ -1,0 +1,56 @@
+#!/bin/bash
+##########################################################################
+#
+# Script to add a google maps key to overviewer if there isn't one already 
+#
+# Working around issue:
+# https://github.com/overviewer/Minecraft-Overviewer/issues/1308
+#
+# This script is run at startup and also once a day, just in case
+# overviewer is updated and the source index.html needs re-patching.
+#
+# Overviewer copies the source index.html at the beginning of the render,
+# and then takes its sweet time rendering tiles, meaning for at least 3
+# minutes (possibly lots more if someone has explored the map) the website
+# is unusable. Patching the source index ensures it is copied and the map
+# always works. 
+#
+##########################################################################
+
+TestString="https://maps.google.com/maps/api/js?sensor=false"
+AddString="&key="
+
+if [ "root" != "$(whoami)" ] ; then
+    echo "This script must be run as root user." 1>&2
+    exit 1
+fi
+
+printf "\n%s INFO] STARTING ov_keyfix\n" "$(date "+%Y%m%d %H:%M:%S")"
+
+if [ -z "$GOOGLE_MAPS_KEY" ] ; then
+	echo "Google maps key not found. Ensure environment variable GOOGLE_MAPS_KEY is set."
+	exit 1
+else
+    printf "Google maps key: %s\n" "$GOOGLE_MAPS_KEY"
+fi
+
+for f in $(find /usr/ -name "index.html" -print | grep overviewer_core/data/web_assets)
+do
+    if [ "$(grep "$TestString" "$f")" ] ; then
+        echo "$f is a file to check"
+        if [ -z "$(grep "$TestString$AddString" "$f")" ] ; then
+            echo "$f doesn't have a key."
+                if [ ! -h "$f" ] ; then
+                    echo "$f is not a symlink, lets get you patched up."
+                    printf "Before adding the key: %s\n" "$(grep "$TestString" "$f")"
+                    sed -i "s/\?sensor=false/&\&key=$GOOGLE_MAPS_KEY/g" "$f"
+                    printf "After adding the key:  %s\n" "$(grep "$TestString" "$f")"
+                else
+                    echo "$f is a symlink, skipping..."
+                fi
+        fi
+    fi
+    if [ "$(grep "$TestString$AddString" "$f")" ] ; then
+        printf "$f has a key, see here: %s\n" "$(grep "$TestString$AddString" "$f")"
+    fi
+done

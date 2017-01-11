@@ -214,6 +214,14 @@ buildjar() {
     java -jar BuildTools.jar --rev $1
     cp $SPIGOT_HOME/build/Spigot/Spigot-Server/target/spigot-*.jar $SPIGOT_HOME/spigot-$1.jar
     cd $SPIGOT_HOME/
+    # grab the minecraft server version, download the minecraft client for overviewer
+    rm -Rf /overviewer/jar
+    mkdir -p /overviewer/jar
+    MC_VERSION=`ls -1 /$SPIGOT_HOME/build/work/minecraft_server.*.jar | cut -d'.' -f2- | sed 's/\(.*\)\..*/\1/'`
+    export MC_VERSION
+    wget https://s3.amazonaws.com/Minecraft.Download/versions/${MC_VERSION}/${MC_VERSION}.jar -P /overviewer/jar
+    ls -1t /overviewer/jar | grep -v latest | head -1 | xargs -I{} ln -s {} /overviewer/jar/minecraft_client.latest.jar
+    chmod -R 777 /overviewer
     rm -Rf $SPIGOT_HOME/build
   fi
   execCMD "rm -f $SPIGOT_HOME/spigot.jar"
@@ -394,7 +402,7 @@ case "$1" in
 
   log)
      echo "Abort with CTRL-C"
-     tail -f $MC_DIR/output.con
+     tail -f -n 50 $MC_DIR/output.con
   ;;
 
   console)
