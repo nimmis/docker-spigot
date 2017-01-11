@@ -1,15 +1,16 @@
 #!/bin/bash
 #
-# add ov_render to crontab
+# add overviewer to crontab
 
 if [ "$(grep "ov_render" < /etc/crontab)" ] ; then
   
-  	echo "ov_render already in crontab"
+  	echo "overviewer already in crontab"
 
 else
 
   	echo "ov_render not in crontab, adding."
 	echo "0,30 * * * * minecraft . /minecraft/my_env.sh; ov_render >> /tmp/crontab.log 2>&1" >> /etc/crontab
 	echo "5,15,25,35,45,55 * * * * minecraft . /minecraft/my_env.sh; ov_render -gp >> /tmp/crontab.log 2>&1" >> /etc/crontab
+	echo "0 2 * * * root . /minecraft/my_env.sh; ov_keyfix >> /tmp/crontab.log 2>&1" >> /etc/crontab
 
 fi

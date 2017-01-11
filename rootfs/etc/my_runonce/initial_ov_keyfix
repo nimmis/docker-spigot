@@ -1,0 +1,5 @@
+#!/bin/bash
+#
+# run ov_keyfix
+
+ov_keyfix

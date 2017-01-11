@@ -47,9 +47,7 @@ if [ -z "$(pgrep overviewer.py)" ];then
     $Script >> $LogFile
     
     if [ $Action = "Render" ];then
-        printf "%s INFO] Before Update: %s\n" "$(date "+%Y%m%d %H:%M:%S")" "$(grep sensor=false /usr/share/nginx/html/index.html)" >> $LogFile
-        ov_keyfix >> $LogFile
-        printf "%s INFO] After Update:  %s\n" "$(date "+%Y%m%d %H:%M:%S")" "$(grep sensor=false /usr/share/nginx/html/index.html)" >> $LogFile
+        printf "%s INFO] Google Maps Key in index.hmtl: %s\n" "$(date "+%Y%m%d %H:%M:%S")" "$(grep sensor=false /usr/share/nginx/html/index.html)" >> $LogFile
     fi
 
     FileSize=$(du -m $LogFile | tr -s '\t' ' ' | cut -d' ' -f1)
