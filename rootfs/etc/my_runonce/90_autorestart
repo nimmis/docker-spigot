@@ -1,0 +1,6 @@
+#!/bin/sh
+
+  if [  "$SPIGOT_AUTORESTART" != "yes" ]; then
+    echo "Setting autorestart off"
+    echo "autorestart=false" >> /etc/supervisor/conf.d/spigot.conf
+  fi

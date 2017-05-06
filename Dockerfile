@@ -2,10 +2,12 @@ FROM nimmis/java:openjdk-8-jdk
 
 MAINTAINER nimmis <kjell.havneskold@gmail.com>
 
-# SPIGOT_HOME default directory for SPIGOT-server
-# SPIGOT_VER  default minecraft version to compile
+# SPIGOT_HOME         default directory for SPIGOT-server
+# SPIGOT_VER          default minecraft version to compile
+# SPIGOT_AUTORESTART  set to yes to restart if minecraft stop command is executed
 ENV SPIGOT_HOME=/minecraft \
-    SPIGOT_VER=latest
+    SPIGOT_VER=latest \
+    SPIGOT_AUTORESTART=yes
 
 # add extra files needed
 COPY rootfs /
