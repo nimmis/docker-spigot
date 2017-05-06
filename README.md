@@ -129,7 +129,20 @@ Sets the maximum memory to use <size>m for Mb or <size>g for Gb, if this paramet
 sets the initial memory reservation used, use <size>m for Mb or <size>g for Gb, if this parameter is not set, it is set to MC_MAXMEM, to set the initial size t0 512 Mb
 
     -e MC_MINMEM=512m
-    
+
+
+#### SPIGOT_AUTORESTART
+
+This variable controlls the behavior of the container when the **stop** command is issued inside minecraft
+
+	-e SPIGOT_AUTORESTART=yes
+   
+Which is the default behavior and does not need to be specified, the minecraft server will autostart if the **stop** command is issued.
+
+	-e SPIGOT_AUTORESTART=no
+	
+If the **stop** command is issued the minecraft server will stay down until the container is restarted or the command **mc_start** is issued
+
 ## look at the last output from the spigot server
 
 To get an output of the latest events from the spigot server type
@@ -174,6 +187,21 @@ If this was the first command issued after a start the output should look like
 	[13:12:35 INFO]: Set the time to 1000
 
 It will continue to output everything from the console until you press CTRL-C
+
+### using the minecraft op command 
+
+To make yourself operator in the game use **mc_send** command, for example give the user **myuser** op use the command.
+
+### using the minecraft stop command
+
+Default the minecraft server will automatically restart on a **stop** inside the minecraft application. You can override this behavior by using
+
+	-e SPIGOT_AUTORESTART=no
+
+This will prevent the server to restart and minecraft has to be started again with the **mc_start** command
+
+
+	docker exec spigot mc_send op myuser
 
 ## starting and stopping the server
 
