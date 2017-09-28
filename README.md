@@ -1,4 +1,4 @@
-## Minecraft server SPIGIT on Ubuntu 16.04 with openjava 1.8
+## Minecraft server SPIGOT on Ubuntu 16.04 with openjava 1.8
 [![](https://images.microbadger.com/badges/image/nimmis/spigot.svg)](https://microbadger.com/images/nimmis/spigot "Get your own image badge on microbadger.com")
 
 This docker image builds and runs the spigot version of minecraft. 
