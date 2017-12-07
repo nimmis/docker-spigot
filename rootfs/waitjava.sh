@@ -1,13 +1,15 @@
 #!/bin/bash
 
-function stop_minecraft() {
-  /etc/init.d/$1 stop
+PROCNAME=$1
+
+function stop_proc() {
+  /etc/init.d/$PROCNAME stop
   exit
 }
 
-trap stop_minecraft SIGINT SIGTERM
+trap stop_proc SIGINT SIGTERM
 
-/etc/init.d/$1 start 
+/etc/init.d/$PROCNAME start 
 
 while true; do 
  if ps -ax | grep [0-9]\ /usr/bin/java | grep -q $2 ; then 
