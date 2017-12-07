@@ -21,7 +21,7 @@
 
 MC_USER=minecraft       # User name running the minecraft server
 MC_PROC=spigot.jar   # name of minecraft jar file
-MC_DIR=/minecraft/ # Directory where the server should run
+MC_DIR=/minecraft # Directory where the server should run
 
 if [ -z "$MC_MAXMEM" ]; then
   MC_MAXMEM="1G"
@@ -77,7 +77,7 @@ EOF
 
 getPID() {
   local PID
-  PID=$( ps -f -u $MC_USER | grep "$MC_PROC" | grep -v "sh -c" |  grep -v grep | awk '{print $2}' )
+  PID=$( ps -f -u $MC_USER | grep "$MC_PROC" | grep "/java " | grep -v "sh -c" |  grep -v grep | awk '{print $2}' )
   printf "%d\n" $PID
 }
 
