@@ -101,11 +101,11 @@ you can then exit from the log with CTRL-C
 
 If you don't specify it will always compile the latest version but if you want a specific version you can specify it by adding
 
-	-e SPIGOT_VER <version>
+	-e SPIGOT_VER=<version>
 
 where <version> is the version you would like to use, to build it with version 1.8 add
 
-	-e SPIGOT_VER 1.8
+	-e SPIGOT_VER=1.8
 
 to the docker run line.
 
