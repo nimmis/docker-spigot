@@ -192,6 +192,8 @@ It will continue to output everything from the console until you press CTRL-C
 
 To make yourself operator in the game use **mc_send** command, for example give the user **myuser** op use the command.
 
+	docker exec spigot mc_send op myuser
+
 ### using the minecraft stop command
 
 Default the minecraft server will automatically restart on a **stop** inside the minecraft application. You can override this behavior by using
@@ -200,8 +202,6 @@ Default the minecraft server will automatically restart on a **stop** inside the
 
 This will prevent the server to restart and minecraft has to be started again with the **mc_start** command
 
-
-	docker exec spigot mc_send op myuser
 
 ## starting and stopping the server
 
