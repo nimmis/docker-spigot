@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# check if start.sh script is present in /minecraft directory
+#
+# (c) 2018 nimmis <kjell.havneskold@gmail.com>
+
+FN="/minecraft/start.sh"
+
+if [ ! -f $FN ] && [ ! -L $FN ] ; then
+    echo "start.sh missing, creating link for $FN"
+    ln -sf /usr/local/bin/mc_start /minecraft/start.sh
+fi
