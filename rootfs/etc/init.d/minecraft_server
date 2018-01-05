@@ -202,19 +202,19 @@ buildjar() {
   # build it if it not exists
   if [ ! -f $SPIGOT_HOME/spigot-$1.jar ]; then
     echo "Building spigot version ($1) jar file, be patient"
-    if [ -d $SPIGOT_HOME/build ]; then
-	rm -Rf $SPIGOT_HOME/build
+    if [ -d /build-mc ]; then
+	rm -Rf /build-mc
     fi
-    mkdir -p $SPIGOT_HOME/build
-    wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar -O $SPIGOT_HOME/build/BuildTools.jar
-    HOME=$SPIGOT_HOME/build
+    mkdir -p /build-mc
+    wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar -O /build-mc/BuildTools.jar
+    HOME=/build-mc
     export HOME
     cd $HOME
     git config --global --unset core.autocrlf
     java -jar BuildTools.jar --rev $1
-    cp $SPIGOT_HOME/build/Spigot/Spigot-Server/target/spigot-*.jar $SPIGOT_HOME/spigot-$1.jar
+    cp /build-mc/Spigot/Spigot-Server/target/spigot-*.jar $SPIGOT_HOME/spigot-$1.jar
     cd $SPIGOT_HOME/
-    rm -Rf $SPIGOT_HOME/build
+    rm -Rf /build-mc
   fi
   execCMD "rm -f $SPIGOT_HOME/spigot.jar"
   execCMD "ln -s $SPIGOT_HOME/spigot-$1.jar $SPIGOT_HOME/spigot.jar"

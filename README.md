@@ -11,6 +11,9 @@ Each time the container is started the presence of the file /minecraft/spigot.ja
 The spigot daemon is started with superovisord, see my Ubuntu container for a more detailed description of my implementation of an init-process in ubuntu, see [nimmis/ubuntu](https://hub.docker.com/r/nimmis/ubuntu/)
 
 Whats new is
+
+- Fix for problem introduced during fall of 2017 for both Windows 10 and MacOS versions of docker, failed to build new versions of spigot 
+- Autodetection of timezone if container has access to internet
 - adjust minecraft user UID to match mounted volume
 - selectable memory size for the Java process
 - selectable spigot version
