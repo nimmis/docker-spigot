@@ -8,6 +8,8 @@ MAINTAINER nimmis <kjell.havneskold@gmail.com>
 ENV SPIGOT_HOME=/minecraft \
     SPIGOT_VER=latest \
     SPIGOT_AUTORESTART=yes
+    MC_MAXMEM= \
+    MC_MINMEM=
 
 # add extra files needed
 COPY rootfs /
