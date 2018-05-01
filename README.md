@@ -218,7 +218,7 @@ To start it after being stopped do
 
 Finally to restart it do
 
-	docker exec spiot mc_restart
+	docker exec spigot mc_restart
 
 ## stopping the container
 
