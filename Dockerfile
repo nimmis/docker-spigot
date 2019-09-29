@@ -29,6 +29,8 @@ RUN apt-get update && \
     # remove apt cache from image
     apt-get clean all
 
+# Docker Healthcheck:
+HEALTHCHECK CMD /usr/local/bin/healthcheck.sh
 
 # expose minecraft port
 EXPOSE 25565
