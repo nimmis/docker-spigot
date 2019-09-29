@@ -211,7 +211,7 @@ buildjar() {
     export HOME
     cd $HOME
     git config --global --unset core.autocrlf
-    java -jar BuildTools.jar --rev $1
+    java -Xmx1024M -jar BuildTools.jar --rev $1
     cp /build-mc/Spigot/Spigot-Server/target/spigot-*.jar $SPIGOT_HOME/spigot-$1.jar
     cd $SPIGOT_HOME/
     rm -Rf /build-mc
