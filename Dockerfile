@@ -15,7 +15,10 @@ ENV LC_ALL en_US.UTF-8
 # SPIGOT_AUTORESTART  set to yes to restart if minecraft stop command is executed
 ENV SPIGOT_HOME=/minecraft \
     SPIGOT_VER=latest \
-    SPIGOT_AUTORESTART=yes
+    SPIGOT_AUTORESTART=yes \
+    MC_MAXMEM= \
+    MC_MINMEM= \
+    OTHER_JAVA_OPS=
 
 # add extra files needed
 COPY rootfs /
