@@ -8,5 +8,4 @@
 ###########################################################
 
 echo "/etc/init.d/minecraft_server send \"$1\""
-/etc/init.d/minecraft_server send "$1 $2 $3 $4 $5"
-mc_log
+/etc/init.d/minecraft_server send "$*"

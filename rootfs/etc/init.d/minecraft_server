@@ -31,8 +31,8 @@ if [ -z  "$MC_MINMEM" ]; then
   MC_MINMEM=$MC_MAXMEM ;
 fi
 
-
-MC_JAVA_OPS="-Xmx$MC_MAXMEM -Xms$MC_MINMEM"   # java options for minecraft server
+# Add $OTHER_JAVA_OPS to let the user determine what options they need
+MC_JAVA_OPS="-Xmx$MC_MAXMEM -Xms$MC_MINMEM $OTHER_JAVA_OPS"   # java options for minecraft server
 
 JAVACMD=$(which java)
 
@@ -393,8 +393,9 @@ case "$1" in
   ;;
 
   log)
+     # tail will not work after log file delete, use -F to keep it working
      echo "Abort with CTRL-C"
-     tail -f $MC_DIR/output.con
+     tail -F $MC_DIR/output.con
   ;;
 
   console)
