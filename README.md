@@ -1,5 +1,7 @@
-## Minecraft server SPIGOT on Ubuntu 16.04 with openjava 1.8
+## Minecraft server SPIGOT on Ubuntu 20.04 with OpenJDK 1.16
 [![](https://images.microbadger.com/badges/image/nimmis/spigot.svg)](https://microbadger.com/images/nimmis/spigot "Get your own image badge on microbadger.com")
+
+**NOW works with Minecraft 1.17**
 
 This docker image builds and runs the spigot version of minecraft. 
 
@@ -12,6 +14,8 @@ The spigot daemon is started with superovisord, see my Ubuntu container for a mo
 
 Whats new is
 
+- Updated java version to 16 to compile minecraft 1.17
+- Switched to Adopt OpenJDK
 - Fix for problem introduced during fall of 2017 for both Windows 10 and MacOS versions of docker, failed to build new versions of spigot 
 - Autodetection of timezone if container has access to internet
 - adjust minecraft user UID to match mounted volume
@@ -114,7 +118,7 @@ to the docker run line.
 
 #### versions available
 
-The following version is atm avaliable 1.8, 1.8.3, 1.8.7, 1.8.8, 1.9, 1.9.2 and latest. Please check
+Please check
 the web page for [BuildTools](https://www.spigotmc.org/wiki/buildtools/#versions) to get the latest information. 
 
 ### setup memory to use
@@ -145,6 +149,14 @@ Which is the default behavior and does not need to be specified, the minecraft s
 	-e SPIGOT_AUTORESTART=no
 	
 If the **stop** command is issued the minecraft server will stay down until the container is restarted or the command **mc_start** is issued
+
+#### OTHER_JAVA_OPS
+
+Allows to add other Java options when starting minecraft
+
+	-e OTHER_JAVA_OPS=
+
+
 
 ## look at the last output from the spigot server
 
