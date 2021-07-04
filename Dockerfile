@@ -7,7 +7,9 @@ MAINTAINER nimmis <kjell.havneskold@gmail.com>
 # SPIGOT_AUTORESTART  set to yes to restart if minecraft stop command is executed
 ENV SPIGOT_HOME=/minecraft \
     SPIGOT_VER=latest \
-    SPIGOT_AUTORESTART=yes
+    SPIGOT_AUTORESTART=yes \
+    MC_MAXMEM= \
+    MC_MINMEM=
 
 # add extra files needed
 COPY rootfs /
