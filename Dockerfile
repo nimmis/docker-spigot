@@ -19,7 +19,7 @@ ENV SPIGOT_HOME=/minecraft \
 ENV DEBIAN_FRONTEND noninteractive
 
 # set default java environment variable
-ENV JAVA_VERSION_MAJOR=16 \
+ENV JAVA_VERSION_MAJOR=17 \
     JAVA_TYPE="" \
     JAVA_OPT=hotspot \
     JAVA_HOME=/usr/lib/jvm/default-jvm \
