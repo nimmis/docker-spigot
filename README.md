@@ -1,7 +1,7 @@
-## Minecraft server SPIGOT on Ubuntu 20.04 with OpenJDK 1.16
+## Minecraft server SPIGOT on Ubuntu 20.04 with OpenJDK 1.17
 [![](https://images.microbadger.com/badges/image/nimmis/spigot.svg)](https://microbadger.com/images/nimmis/spigot "Get your own image badge on microbadger.com")
 
-**NOW works with Minecraft 1.17**
+**NOW works with Minecraft 1.18**
 
 This docker image builds and runs the spigot version of minecraft. 
 
@@ -10,11 +10,11 @@ released minecraft.jar
 
 Each time the container is started the presence of the file /minecraft/spigot.jar, if the file is missing a build of spigot.jar is started.
 
-The spigot daemon is started with superovisord, see my Ubuntu container for a more detailed description of my implementation of an init-process in ubuntu, see [nimmis/ubuntu](https://hub.docker.com/r/nimmis/ubuntu/)
+The spigot daemon is started with supervisored, see my Ubuntu container for a more detailed description of my implementation of an init-process in ubuntu, see [nimmis/ubuntu](https://hub.docker.com/r/nimmis/ubuntu/)
 
 Whats new is
 
-- Updated java version to 16 to compile minecraft 1.17
+- Updated java version to 16 to compile minecraft 1.18
 - Switched to Adopt OpenJDK
 - Fix for problem introduced during fall of 2017 for both Windows 10 and MacOS versions of docker, failed to build new versions of spigot 
 - Autodetection of timezone if container has access to internet
@@ -26,7 +26,6 @@ Whats new is
    - start/stop/restart the spigot server
    - send console commands to the server
    - look at console output from the server
-- 
 
 ## Why not a precompiled version of spigot is included
 

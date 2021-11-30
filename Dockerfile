@@ -51,36 +51,28 @@ RUN apt-get update && \
     export CNAME=$(cat /etc/os-release | grep UBUNTU_CODENAME | cut -d = -f 2) && \
 
     # req. packages
-    apt-get install -y wget apt-transport-https gnupg && \
+    apt-get install -y wget apt-transport-https gnupg curl && \
 
-    # get pgp key
+    # add Azul's public key
+    apt-key adv \
+        --keyserver hkp://keyserver.ubuntu.com:80 \
+        --recv-keys 0xB1998361219BD9C9 && \
 
-    wget https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public && \
-    gpg --no-default-keyring --keyring ./adoptopenjdk-keyring.gpg --import public && \
-    gpg --no-default-keyring --keyring ./adoptopenjdk-keyring.gpg --export --output adoptopenjdk-archive-keyring.gpg && \
-    rm public adoptopenjdk-keyring.gpg && \
-    mv adoptopenjdk-archive-keyring.gpg /usr/share/keyrings && \
+    # download and install the package that adds 
+    # the Azul APT repository to the list of sources 
+    curl -O https://cdn.azul.com/zulu/bin/zulu-repo_1.0.0-3_all.deb && \
 
-    # Configure AdoptOpenJDK's apt repository
-    echo "deb [signed-by=/usr/share/keyrings/adoptopenjdk-archive-keyring.gpg] https://adoptopenjdk.jfrog.io/adoptopenjdk/deb $CNAME main" | \
-      tee /etc/apt/sources.list.d/adoptopenjdk.list && \
+    # install the package
+    apt-get install -y ./zulu-repo_1.0.0-3_all.deb && \
 
     # refresh
     apt-get update && \
 
-    # install
-    apt-get install -y adoptopenjdk-$JAVA_VERSION_MAJOR-$JAVA_OPT$JAVA_TYPE && \
-
-    # set compatible home path
-    ln -s /usr/lib/jvm/adoptopenjdk-$JAVA_VERSION_MAJOR-$JAVA_OPT$JAVA_TYPE-amd64 /usr/lib/jvm/default-jvm && \
-
-
-
+    # install Azul Zulu JDK $JAVA_VERSION_MAJOR-$JAVA_OPT$JAVA_TYPE
+    apt-get install -y zulu$JAVA_VERSION_MAJOR-jdk && \
 
     # remove apt cache from image
     apt-get clean all
 
 # expose minecraft port
 EXPOSE 25565
-
-
