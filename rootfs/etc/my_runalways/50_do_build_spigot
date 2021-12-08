@@ -1,3 +1,14 @@
 #!/bin/bash
+#
+# script to check and if not found, build the correct version
+# 
+#
+# (c) 2021 nimmis <kjell.havneskold@gmail.com>
+#
+
+
+if [ -f /etc/mc_current ]; then
+ . /etc/mc_current
+fi
 
 /etc/init.d/minecraft_server create $SPIGOT_VER 
