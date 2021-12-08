@@ -11,7 +11,7 @@
 #
 # startscript for spigot minecraft server
 #
-# (c) 2015-2016 nimmis <kjell.havneskold@gmail.com>
+# (c) 2015-2021nimmis <kjell.havneskold@gmail.com>
 #
 
 # fetch global variables when starting from supervisord
@@ -199,6 +199,8 @@ checkOK() {
 #
 
 buildjar() {
+  # set right version of java for this minecraft version
+  /usr/local/bin/set_mc_ver $1
   # build it if it not exists
   if [ ! -f $SPIGOT_HOME/spigot-$1.jar ]; then
     echo "Building spigot version ($1) jar file, be patient"
@@ -212,7 +214,8 @@ buildjar() {
     cd $HOME
     git config --global --unset core.autocrlf
     java -Xmx1024M -jar BuildTools.jar --rev $1
-    cp /build-mc/Spigot/Spigot-Server/target/spigot-*.jar $SPIGOT_HOME/spigot-$1.jar
+    #cp /build-mc/Spigot/Spigot-Server/target/spigot-*.jar $SPIGOT_HOME/spigot-$1.jar
+    cp /build-mc/spigot-*.jar $SPIGOT_HOME/spigot-$1.jar
     cd $SPIGOT_HOME/
     rm -Rf /build-mc
   fi
@@ -368,6 +371,15 @@ case "$1" in
     if [ -z "$SVER" ] ; then
       SVER="latest"
     fi
+
+    # check if version exists
+    /usr/local/bin/check_mc_versions $SVER
+
+    if [ $? -eq 1 ]; then
+       echo "version $SVER is not a releaseverion"
+       exit 1
+    fi
+
     echo "Setting version to $SVER"
 
     buildjar $SVER
@@ -379,6 +391,7 @@ case "$1" in
         getPID
     else
 	echo "$MC_PROC is not running"
+	exit 1
     fi
 
   ;;
