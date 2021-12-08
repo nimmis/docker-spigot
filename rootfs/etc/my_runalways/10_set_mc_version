@@ -1,0 +1,32 @@
+#!/bin/sh
+#
+# script to check and set correct minecraft version
+# 
+# SPIGOT_VERSION          spigot.jar in minecraft directory   Final version
+# =========================================================================
+# <blank>                  <missing>                          latest
+# <blank>                  set                                <version of spigot jar>
+# <version set>            <missing>                          <version set>
+# <version set>            set                                <version set>
+#
+#
+# (c) 2021 nimmis <kjell.havneskold@gmail.com>
+#
+
+if [ "${SPIGOT_VER}x" = "x" ]; then
+  echo "No mc version defined"
+  if [ -L ${SPIGOT_HOME}/spigot.jar ]; then
+	  echo "defined version"
+	  mc_ver=$(ls -l /$SPIGOT_HOME/spigot.jar | grep -Po '(?<=spigot-)\d.\d*')
+	  echo "found version $mc_ver"
+	  echo "SPIGOT_VER=$mc_ver" > /etc/mc_current
+	  /usr/local/bin/set_mc_ver $mc_ver
+  else
+    echo "SPIGOT_VER=latest" > /etc/mc_current
+    /usr/local/bin/set_mc_ver latest
+  fi
+else
+  if [ -f /etc/mc_current ]; then
+    rm /etc/mc_current
+  fi    
+fi
