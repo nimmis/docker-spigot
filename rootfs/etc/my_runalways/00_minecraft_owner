@@ -55,7 +55,7 @@ else
   if [ ! "$MCDIR_OWNER" = "$MC_UID" ]; then
 
     echo "missmatch between directory owner and minecraft user"
-    echo "Changed owner if minecraft to UID $MCDIR_OWNER"
+    echo "Changed owner of minecraft to UID $MCDIR_OWNER"
 
     set_mcuid $MCDIR_OWNER
     MC_UID=$MCDIR_OWNER
