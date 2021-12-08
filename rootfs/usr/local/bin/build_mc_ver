@@ -1,0 +1,7 @@
+#!/bin/bash
+  /usr/local/bin/get_mc_ver $1
+  if [ -f $SPIGOT_HOME/spigot-$1.jar ]; then
+    echo "Setting $1 as current spigot version"	  
+    rm -f $SPIGOT_HOME/spigot.jar
+    ln -s $SPIGOT_HOME/spigot-$1.jar $SPIGOT_HOME/spigot.jar
+  fi

@@ -1,0 +1,71 @@
+#!/bin/bash
+###########################################################
+#
+# script to set correct java version for different 
+# versions of minecraft
+#
+# (c) 2021 nimmis <kjell.havneskold@gmail.com>
+#
+###########################################################
+if [ $# -eq 0 ]; then
+  echo "no parameter"
+  exit 1
+fi
+
+# fucntion to load correct java version 
+
+function load_java() {
+
+  case "$1" in
+    1.18*)
+      /usr/local/bin/set_java_ver 17
+      ;;
+
+    latest | 1.17*)
+      /usr/local/bin/set_java_ver 16
+      ;;
+
+    *)
+      /usr/local/bin/set_java_ver 11
+      ;;
+
+  esac
+
+}
+
+# get current version of minecraft
+
+if [ -L /$SPIGOT_HOME/spigot.jar ]; then
+  mc_ver=$(ls -l /$SPIGOT_HOME/spigot.jar | grep -Po '(?<=spigot-)\d.\d*')
+  echo "Current running version is $mc_ver"
+else
+  mc_ver=""
+fi
+
+if [ "$1" = "$mc_ver" ]; then
+  echo "Alredy running $mc_ver, aborting update"
+  load_java $mc_ver
+  exit
+fi
+
+# get current state of minecraft server
+
+/etc/init.d/minecraft_server status > /dev/null
+state=$?
+if [ $state -eq 0 ]; then
+  echo "Minecraft server running, shuting down before version change"
+  /usr/local/bin/mc_stop
+fi
+
+# set correct java version
+load_java $1
+
+# build
+/usr/local/bin/build_mc_ver $1
+
+if [ $state -eq 0 ]; then
+  echo "Minecraft server was running,restarting after version change"
+  /usr/local/bin/mc_start
+fi
+
+exit 0

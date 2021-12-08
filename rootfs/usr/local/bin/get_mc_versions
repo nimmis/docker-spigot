@@ -1,0 +1,4 @@
+#!/bin/sh
+
+curl 'https://launchermeta.mojang.com/mc/game/version_manifest.json' |    jq '.versions[] | select(.type == "release") | .id' | sed 's/\"//g' | sort > /etc/mc_versions
+

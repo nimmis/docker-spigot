@@ -1,0 +1,17 @@
+#!/bin/bash
+
+echo "checking $1"
+
+# download current version from monjang
+if [ ! -f /etc/mc_versions ]; then
+  /usr/local/bin/get_mc_versions
+fi
+
+# include latest as accepted verion
+if [ "$1" = "latest" ]; then
+  exit
+fi
+
+# return 0 if release version
+cat /etc/mc_versions | grep  -q $1\$
+

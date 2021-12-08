@@ -1,0 +1,27 @@
+#!/bin/bash
+  
+  # build it if it not exists
+  if [ ! -f $SPIGOT_HOME/spigot-$1.jar ]; then
+    echo "Building spigot version ($1) jar file, be patient"
+    if [ -d /build-mc ]; then
+        rm -Rf /build-mc
+    fi
+    mkdir -p /build-mc
+    wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar -O /build-mc/BuildTools.jar
+    HOME=/build-mc
+    export HOME
+    cd $HOME
+    git config --global --unset core.autocrlf
+    java -Xmx1024M -jar BuildTools.jar --rev $1
+    cp /build-mc/spigot-*.jar $SPIGOT_HOME/spigot-$1.jar
+    cd $SPIGOT_HOME/
+    rm -Rf /build-mc
+  fi
+
+  if [ -f $SPIGOT_HOME/spigot-$1.jar ]; then
+    echo "Successfull build of spigot version $1"	  
+  else
+    mc_ver=$(ls -l /$SPIGOT_HOME/spigot.jar | grep -Po '(?<=spigot-)\d.\d*')
+    echo "BUILD FAILED: spigot version $1 failed (continue running version $mc_ver) "
+    exit 1
+  fi
