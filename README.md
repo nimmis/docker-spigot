@@ -1,7 +1,15 @@
-## Minecraft server SPIGOT on Ubuntu 20.04 with OpenJDK 1.16
-[![](https://images.microbadger.com/badges/image/nimmis/spigot.svg)](https://microbadger.com/images/nimmis/spigot "Get your own image badge on microbadger.com")
+## Minecraft server SPIGOT on Ubuntu 20.04 with OpenJDK 11/16/17
 
-**NOW works with Minecraft 1.17**
+![](https://img.shields.io/docker/pulls/nimmis/spigot?style=flat-square)
+
+
+**NOW works with Minecraft 1.18**
+
+Need **-e SPIGOT_VERSION=1.18** to build because spigot still consider 1.17 as last stable version.
+
+This is a major change in logic to build the correct version of spigot so some combination of conditions may not compile correctly. Please make an issue so I can correct it. There will be another build shortly with another feature
+
+Java bug on version 1.17 with 1 core add **-e OTHER_JAVA_OPTS=-Djava.util.concurrent.ForkJoinPool.common.parallelism=1** as workaround
 
 This docker image builds and runs the spigot version of minecraft. 
 
@@ -14,19 +22,10 @@ The spigot daemon is started with superovisord, see my Ubuntu container for a mo
 
 Whats new is
 
-- Updated java version to 16 to compile minecraft 1.17
-- Switched to Adopt OpenJDK
-- Fix for problem introduced during fall of 2017 for both Windows 10 and MacOS versions of docker, failed to build new versions of spigot 
-- Autodetection of timezone if container has access to internet
-- adjust minecraft user UID to match mounted volume
-- selectable memory size for the Java process
-- selectable spigot version
-- do a nice shutdown of the server when the docker stop command is issued
-- docker accessible commands to 
-   - start/stop/restart the spigot server
-   - send console commands to the server
-   - look at console output from the server
-- 
+- possibillity to change spigot versions i running containers
+- Detects version if mc-directory already has a precompiled version active
+- Adjust java version depending of MC version, downloads additional java version if needed
+- Support for Minecraft version 1.18
 
 ## Why not a precompiled version of spigot is included
 
@@ -74,47 +73,81 @@ you can follow the output from the compilation with then command (assume that yo
 the name spigot)
 
 	docker logs -f spigot
-    *** open logfile
-    *** Run files in /etc/my_runonce/
-    *** Running /etc/my_runonce/set_timezone...
-    *** Run files in /etc/my_runalways/
-    *** Running /etc/my_runalways/do_build_spigot...
-    --2016-12-04 13:17:37--  https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
-    Resolving hub.spigotmc.org (hub.spigotmc.org)... 104.27.195.96, 104.27.194.96, 2400:cb00:2048:1::681b:c360, ...
-    Connecting to hub.spigotmc.org (hub.spigotmc.org)|104.27.195.96|:443... connected.
-    HTTP request sent, awaiting response... 200 OK
+	*** open logfile
+	*** Run files in /etc/my_runonce/
+	*** Running /etc/my_runonce/00_dump_info.sh...
+	Build of nimmis/spigot:latest, date: 2021-12-06T12:54:26Z
+	Build of nimmis/ubuntu:20.04, date: 2021-07-04T09:06:36Z
+	*** Running /etc/my_runonce/50_set_timezone...
+	timezone not set, trying to autodetect
+	external ip is 95.192.***.***
+	timezone should be Europe/Stockholm
+	setting timezone to Europe/Stockholm
+	*** Running /etc/my_runonce/90_autorestart...
+	*** Run files in /etc/my_runalways/
+	*** Running /etc/my_runalways/00_minecraft_owner...
+	missmatch between directory owner and minecraft user
+	Changed owner of minecraft to UID 0
+	*** Running /etc/my_runalways/10_set_mc_version...
+	*** Running /etc/my_runalways/50_do_build_spigot...
+	checking 1.18
+	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+	                                 Dload  Upload   Total   Spent    Left  Speed
+	100  135k  100  135k    0     0   436k      0 --:--:-- --:--:-- --:--:--  434k
+	Setting version to 1.18
+	set java version to 17
+	Building spigot version (1.18) jar file, be patient
+
+
 
 Then the compilation is completed the server will start and you will see something like
 
-    *** Log: Success! Everything compiled successfully. Copying final .jar files now.
-    *** Log: Copying craftbukkit-1.11-R0.1-SNAPSHOT.jar to /minecraft/build/.
-    *** Log:   - Saved as craftbukkit-1.11.jar
-    *** Log: Copying spigot-1.11-R0.1-SNAPSHOT.jar to /minecraft/build/.
-    *** Log:   - Saved as spigot-1.11.jar
-    *** Running /etc/my_runalways/eula...
-    *** Running /etc/rc.local...
-    *** Booting supervisor daemon...
-    *** Supervisor started as PID 4820
-    *** Started processes via Supervisor......
-    crond                            RUNNING    pid 4824, uptime 0:00:03
-    spigot                           RUNNING    pid 4825, uptime 0:00:03
-    syslog-ng                        RUNNING    pid 4823, uptime 0:00:03
-
-
+	Success! Everything completed successfully. Copying final .jar files now.
+	Copying spigot-1.18-R0.1-SNAPSHOT-bootstrap.jar to /build-mc/./spigot-1.18.jar
+  	Saved as ./spigot-1.18.jar
+	Successfull build of spigot version 1.18
+	Setting 1.18 as current spigot version
+	*** Running /etc/my_runalways/85_fix_startsh...
+	start.sh missing, creating link for /minecraft/start.sh
+	*** Running /etc/my_runalways/90_eula...
+	*** Booting supervisor daemon...
+	*** Supervisor started as PID 781
+	*** Started processes via Supervisor......
+	crond                            RUNNING   pid 783, uptime 0:00:04
+	spigot                           RUNNING   pid 784, uptime 0:00:04
+	syslog-ng                        RUNNING   pid 785, uptime 0:00:03
 
 you can then exit from the log with CTRL-C
 
 ### Selecting version to compile
 
-If you don't specify it will always compile the latest version but if you want a specific version you can specify it by adding
+You can now change the minecraft version after you started the container the first time.
+
+#### defining version on first start
+
+If you don't specify this parameter it will check the minecraft directory in the container to see if there is a previous compiled version linked. If so the container will use that version.
+
+If no version of spigot is linked (like first time) it will always compile the latest version but if you want a specific version you can specify it by adding
 
 	-e SPIGOT_VER=<version>
 
-where <version> is the version you would like to use, to build it with version 1.8 add
+where <version> is the version you would like to use, to build it with version 1.18 add
 
-	-e SPIGOT_VER=1.8
+	-e SPIGOT_VER=1.18
 
 to the docker run line.
+
+#### change version in a running container
+
+There is a command to change minecraft version in a running container
+
+	docker exec -it spigot set_mc_ver <version>
+
+when the command is executed it will check if there is a compiled version already in the minecrafte folder, if not it will build it.
+
+It first stops the running mincraft, change java version if needed (download if missing), compile a new spigot if needed and then start minecraft again.
+
+It is not recomended to downgrade version as the world-information is not backwards compaible.
 
 #### versions available
 
@@ -275,6 +308,44 @@ If you don't want to do this and want to manually set the UID of the minecraft u
 	-e SPIGOT_UID=1132
 
 sets the minecraft user UID to 1132.
+
+## Other commands available to container
+
+The syntax is
+
+	docker exec -ti <spigot container name> <command> <paramaters>
+
+### command: get_mc_versions
+
+If you get minecraft version not found and it is a version released after to started the container the first time. You need to update the list of available versions, do 
+
+	docker exec -it <spigotverson> get_mc_versions
+
+and you should get an output simular to
+
+	docker exec -it spigot get_mc_versions
+	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+	100  135k  100  135k    0     0   498k      0 --:--:-- --:--:-- --:--:--  498k
+
+and the versionlist is updated.
+
+## Old versions news
+
+- Updated java version to 17 which is a LTS version
+- Adopt moved to Eclipe Foundation and changed name to Adoptium
+- Updated java version to 16 to compile minecraft 1.17
+- Switched to Adopt OpenJDK
+- Fix for problem introduced during fall of 2017 for both Windows 10 and MacOS versions of docker, failed to build new versions of spigot 
+- Autodetection of timezone if container has access to internet
+- adjust minecraft user UID to match mounted volume
+- selectable memory size for the Java process
+- selectable spigot version
+- do a nice shutdown of the server when the docker stop command is issued
+- docker accessible commands to 
+   - start/stop/restart the spigot server
+   - send console commands to the server
+   - look at console output from the server
 
 ## Issues
 

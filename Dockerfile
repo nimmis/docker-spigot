@@ -19,7 +19,9 @@ ENV SPIGOT_HOME=/minecraft \
 ENV DEBIAN_FRONTEND noninteractive
 
 # set default java environment variable
-ENV JAVA_VERSION_MAJOR=16 \
+ENV JAVA_VERSION_MAJOR=17 \
+    JAVA_VERSION_MINOR=0.1 \
+    JAVA_VERSION_UPDATE=12 \
     JAVA_TYPE="" \
     JAVA_OPT=hotspot \
     JAVA_HOME=/usr/lib/jvm/default-jvm \
@@ -37,7 +39,7 @@ RUN apt-get update && \
     printf "Build of nimmis/spigot:latest, date: %s\n"  `date -u +"%Y-%m-%dT%H:%M:%SZ"` > /etc/BUILDS/spigot && \
 
     # install application
-    apt-get install -y wget git && \
+    apt-get install -y wget git jq && \
 
     # Make special user for minecraft to run in
     /usr/sbin/useradd -s /bin/bash -d /minecraft -m minecraft && \
@@ -55,26 +57,15 @@ RUN apt-get update && \
 
     # get pgp key
 
-    wget https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public && \
-    gpg --no-default-keyring --keyring ./adoptopenjdk-keyring.gpg --import public && \
-    gpg --no-default-keyring --keyring ./adoptopenjdk-keyring.gpg --export --output adoptopenjdk-archive-keyring.gpg && \
-    rm public adoptopenjdk-keyring.gpg && \
-    mv adoptopenjdk-archive-keyring.gpg /usr/share/keyrings && \
+    # create java directory
+    mkdir -p /usr/lib/jvm/ && \
 
-    # Configure AdoptOpenJDK's apt repository
-    echo "deb [signed-by=/usr/share/keyrings/adoptopenjdk-archive-keyring.gpg] https://adoptopenjdk.jfrog.io/adoptopenjdk/deb $CNAME main" | \
-      tee /etc/apt/sources.list.d/adoptopenjdk.list && \
-
-    # refresh
-    apt-get update && \
-
-    # install
-    apt-get install -y adoptopenjdk-$JAVA_VERSION_MAJOR-$JAVA_OPT$JAVA_TYPE && \
+    # download jdk and unpack in /usr/lib/jvm
+    curl -L https://github.com/adoptium/temurin${JAVA_VERSION_MAJOR}-binaries/releases/download/jdk-${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR}%2B${JAVA_VERSION_UPDATE}/OpenJDK${JAVA_VERSION_MAJOR}U-jdk_x64_linux_${JAVA_OPT}_${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR}_${JAVA_VERSION_UPDATE}.tar.gz | tar xz -C /usr/lib/jvm/ && \
 
     # set compatible home path
-    ln -s /usr/lib/jvm/adoptopenjdk-$JAVA_VERSION_MAJOR-$JAVA_OPT$JAVA_TYPE-amd64 /usr/lib/jvm/default-jvm && \
-
-
+    ln -s /usr/lib/jvm/jdk-${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR}+${JAVA_VERSION_UPDATE} /usr/lib/jvm/default-jvm && \
+    ln -s /usr/lib/jvm/default-jvm/bin/java /usr/bin/java && \
 
 
     # remove apt cache from image
