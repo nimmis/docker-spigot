@@ -5,7 +5,7 @@
 
 **NOW works with Minecraft 1.18**
 
-Need **-e SPIGOT_VERSION=1.18** to build because spigot still consider 1.17 as last stable version.
+Need **-e SPIGOT_VER=1.18** to build because spigot still consider 1.17 as last stable version.
 
 This is a major change in logic to build the correct version of spigot so some combination of conditions may not compile correctly. Please make an issue so I can correct it. There will be another build shortly with another feature
 
