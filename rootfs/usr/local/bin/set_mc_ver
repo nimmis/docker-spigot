@@ -25,6 +25,10 @@ function load_java() {
       /usr/local/bin/set_java_ver 16
       ;;
 
+    1.8*)
+      /usr/local/bin/set_java_ver 8
+      ;;
+
     *)
       /usr/local/bin/set_java_ver 11
       ;;
