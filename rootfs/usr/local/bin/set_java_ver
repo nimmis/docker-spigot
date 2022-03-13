@@ -74,7 +74,7 @@ case "$1" in
     echo "set_java_ver <version>"
     echo "set the java version for the container"
     echo 
-    echo "Available versions is 8, 11, 16 and 17"
+    echo "Available versions are 8, 11, 16 and 17"
     exit 1
   ;;
 esac

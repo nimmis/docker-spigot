@@ -17,11 +17,11 @@ fi
 function load_java() {
 
   case "$1" in
-    1.18*)
+    latest | 1.18*)
       /usr/local/bin/set_java_ver 17
       ;;
 
-    latest | 1.17*)
+    1.17*)
       /usr/local/bin/set_java_ver 16
       ;;
 
@@ -53,7 +53,7 @@ fi
 /etc/init.d/minecraft_server status > /dev/null
 state=$?
 if [ $state -eq 0 ]; then
-  echo "Minecraft server running, shuting down before version change"
+  echo "Minecraft server running, shutting down before version change"
   /usr/local/bin/mc_stop
 fi
 
@@ -64,7 +64,7 @@ load_java $1
 /usr/local/bin/build_mc_ver $1
 
 if [ $state -eq 0 ]; then
-  echo "Minecraft server was running,restarting after version change"
+  echo "Minecraft server was running, restarting after version change"
   /usr/local/bin/mc_start
 fi
 

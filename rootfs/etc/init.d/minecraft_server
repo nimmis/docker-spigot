@@ -175,7 +175,7 @@ checkOK() {
 
   execCMD "touch $MC_DIR/testfile 2> /dev/null"
   if [ ! -f $MC_DIR/testfile ] ; then
-	echo "the user $MC_USER has not write access to directory $MC_DIR"
+	echo "the user $MC_USER does not have write access to directory $MC_DIR"
 	exit 1
   else
     rm $MC_DIR/testfile
@@ -376,7 +376,7 @@ case "$1" in
     /usr/local/bin/check_mc_versions $SVER
 
     if [ $? -eq 1 ]; then
-       echo "version $SVER is not a releaseverion"
+       echo "version $SVER is not a release version"
        exit 1
     fi
 
