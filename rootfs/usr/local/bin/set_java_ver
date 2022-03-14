@@ -6,10 +6,30 @@
 # (c) 2021 nimmis <kjell.havneskold@gmail.com>
 #
 ###########################################################
+
+function get_cpu_arch_for_java () {
+  cpu_arch_line=$(lscpu | grep Architecture)
+  case "$cpu_arch_line" in
+    *x86_64*)
+      echo "x64"
+      ;;
+    *armv7*)
+      echo "arm"
+      ;;
+    *armv8*) # unconfirmed
+      echo "aarch64"
+      ;;
+    *)
+      echo "Unknown processor architecture. Please file a bug report."
+      ;;
+  esac
+}
+
 function set_java_17 () {
   if ! [ -d /usr/lib/jvm/jdk-17* ]; then
-    echo "Downloading JDK 1.17"
-    curl -L https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.1%2B12/OpenJDK17U-jdk_x64_linux_hotspot_17.0.1_12.tar.gz  | tar xz -C /usr/lib/jvm
+    CPU_ARCH=$(get_cpu_arch_for_java)
+    echo "Downloading JDK 1.17 $CPU_ARCH"
+    curl -L "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.2%2B8/OpenJDK17U-jdk_${CPU_ARCH}_linux_hotspot_17.0.2_8.tar.gz"  | tar xz -C /usr/lib/jvm
   fi
 
   echo "set java version to 17"
@@ -21,8 +41,9 @@ function set_java_17 () {
 
 function set_java_16 () {
   if ! [ -d /usr/lib/jvm/jdk-16* ]; then
-    echo "Downloading JDK 1.16"
-    curl -L https://github.com/adoptium/temurin16-binaries/releases/download/jdk-16.0.2%2B7/OpenJDK16U-jdk_x64_linux_hotspot_16.0.2_7.tar.gz  | tar xz -C /usr/lib/jvm
+    CPU_ARCH=$(get_cpu_arch_for_java)
+    echo "Downloading JDK 1.16 $CPU_ARCH"
+    curl -L "https://github.com/adoptium/temurin16-binaries/releases/download/jdk-16.0.2%2B7/OpenJDK16U-jdk_${CPU_ARCH}_linux_hotspot_16.0.2_7.tar.gz"  | tar xz -C /usr/lib/jvm
   fi
 
   echo "set java version to 16"
@@ -33,11 +54,12 @@ function set_java_16 () {
 
 function set_java_11 () {
   if ! [ -d /usr/lib/jvm/jdk-11* ]; then
-    echo "Downloading JDK 1.11"
-    curl -L https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.13%2B8/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz  | tar xz -C /usr/lib/jvm
+    CPU_ARCH=$(get_cpu_arch_for_java)
+    echo "Downloading JDK 1.11 $CPU_ARCH"
+    curl -L "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.14.1%2B1/OpenJDK11U-jdk_${CPU_ARCH}_linux_hotspot_11.0.14.1_1.tar.gz"  | tar xz -C /usr/lib/jvm
   fi
 
-  echo "set java version to 16"
+  echo "set java version to 11"
   rm -f /usr/lib/jvm/default-jvm 
   ln -s /usr/lib/jvm/jdk-11* /usr/lib/jvm/default-jvm
 
@@ -45,8 +67,9 @@ function set_java_11 () {
 
 function set_java_8 () {
   if ! [ -d /usr/lib/jvm/jdk8* ]; then
-    echo "Downloading JDK 1.8"
-    curl -L https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u312-b07/OpenJDK8U-jdk_x64_linux_hotspot_8u312b07.tar.gz  | tar xz -C /usr/lib/jvm
+    CPU_ARCH=$(get_cpu_arch_for_java)
+    echo "Downloading JDK 1.8 $CPU_ARCH"
+    curl -L "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u322-b06/OpenJDK8U-jdk_${CPU_ARCH}_linux_hotspot_8u322b06.tar.gz"  | tar xz -C /usr/lib/jvm
   fi
 
   echo "set java version to 8"
@@ -74,7 +97,7 @@ case "$1" in
     echo "set_java_ver <version>"
     echo "set the java version for the container"
     echo 
-    echo "Available versions are 8, 11, 16 and 17"
+    echo "Available versions is 8, 11, 16 and 17"
     exit 1
   ;;
 esac

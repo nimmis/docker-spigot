@@ -57,19 +57,15 @@ RUN apt-get update && \
 
     # get pgp key
 
-    # create java directory
-    mkdir -p /usr/lib/jvm/ && \
-
-    # download jdk and unpack in /usr/lib/jvm
-    curl -L https://github.com/adoptium/temurin${JAVA_VERSION_MAJOR}-binaries/releases/download/jdk-${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR}%2B${JAVA_VERSION_UPDATE}/OpenJDK${JAVA_VERSION_MAJOR}U-jdk_x64_linux_${JAVA_OPT}_${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR}_${JAVA_VERSION_UPDATE}.tar.gz | tar xz -C /usr/lib/jvm/ && \
-
-    # set compatible home path
-    ln -s /usr/lib/jvm/jdk-${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR}+${JAVA_VERSION_UPDATE} /usr/lib/jvm/default-jvm && \
-    ln -s /usr/lib/jvm/default-jvm/bin/java /usr/bin/java && \
-
-
     # remove apt cache from image
     apt-get clean all
+
+RUN mkdir -p /usr/lib/jvm/ && \
+
+    # Install java
+    /usr/local/bin/set_java_ver ${JAVA_VERSION_MAJOR} && \
+
+    ln -s /usr/lib/jvm/default-jvm/bin/java /usr/bin/java
 
 # expose minecraft port
 EXPOSE 25565
