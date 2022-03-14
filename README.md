@@ -5,24 +5,22 @@
 
 **NOW works with Minecraft 1.18**
 
-Need **-e SPIGOT_VER=1.18** to build because spigot still consider 1.17 as last stable version.
-
 This is a major change in logic to build the correct version of spigot so some combination of conditions may not compile correctly. Please make an issue so I can correct it. There will be another build shortly with another feature
 
 Java bug on version 1.17 with 1 core add **-e OTHER_JAVA_OPTS=-Djava.util.concurrent.ForkJoinPool.common.parallelism=1** as workaround
 
 This docker image builds and runs the spigot version of minecraft. 
 
-If the spigot.jar is not found in the minecraft directory the system pulls down BuildTool and build a new spigot.jar from the latest
+If the spigot.jar is not found in the minecraft directory the system pulls down BuildTool and builds a new spigot.jar from the latest
 released minecraft.jar
 
 Each time the container is started the presence of the file /minecraft/spigot.jar, if the file is missing a build of spigot.jar is started.
 
-The spigot daemon is started with superovisord, see my Ubuntu container for a more detailed description of my implementation of an init-process in ubuntu, see [nimmis/ubuntu](https://hub.docker.com/r/nimmis/ubuntu/)
+The spigot daemon is started with supervisord, see my Ubuntu container for a more detailed description of my implementation of an init-process in ubuntu, see [nimmis/ubuntu](https://hub.docker.com/r/nimmis/ubuntu/)
 
-Whats new is
+What's new is
 
-- possibillity to change spigot versions i running containers
+- Possibility to change spigot versions i running containers
 - Detects version if mc-directory already has a precompiled version active
 - Adjust java version depending of MC version, downloads additional java version if needed
 - Support for Minecraft version 1.18
@@ -48,13 +46,13 @@ the parameter
 
 	-p 25565:25565
 
-tell on witch external port the internal 25565 should be connected, in this case the same, if
-you only type -p 25565 it will connect to a random port on the machine
+specifies on which external port the internal 25565 should be connected, in this case the same.
+If you only type -p 25565 it will connect to a random port on the machine.
 
 ## Giving the container a name
 
 To make it easier to handle you container you can give it a name instead of the long
-number thats normally give to it, add a
+number that's normally given to it, add a
 
 	--name spigot
 
@@ -69,7 +67,7 @@ This will take a couple of minutes depending on computer and network speed. It w
 the selected version on BuildTools and build a spigot.jar from the selected minecraft version.
 This is done in numerous steps so be patient. 
 
-you can follow the output from the compilation with then command (assume that you given the container
+You can follow the output from the compilation with this command (assuming that you gave the container
 the name spigot)
 
 	docker logs -f spigot
@@ -100,7 +98,7 @@ the name spigot)
 
 
 
-Then the compilation is completed the server will start and you will see something like
+Once the compilation completes the server will start and you will see something like
 
 	Success! Everything completed successfully. Copying final .jar files now.
 	Copying spigot-1.18-R0.1-SNAPSHOT-bootstrap.jar to /build-mc/./spigot-1.18.jar
@@ -143,11 +141,11 @@ There is a command to change minecraft version in a running container
 
 	docker exec -it spigot set_mc_ver <version>
 
-when the command is executed it will check if there is a compiled version already in the minecrafte folder, if not it will build it.
+when the command is executed it will check if there is a compiled version already in the minecraft folder, if not it will build it.
 
-It first stops the running mincraft, change java version if needed (download if missing), compile a new spigot if needed and then start minecraft again.
+It first stops the running minecraft, changes java version if needed (download if missing), compiles a new spigot if needed and then starts minecraft again.
 
-It is not recomended to downgrade version as the world-information is not backwards compaible.
+It is not recommended to downgrade version as the world-information is not backwards compatible.
 
 #### versions available
 
@@ -160,20 +158,20 @@ There are two environment variables to set maximum and initial memory for spigot
 
 #### MC_MAXMEM
 
-Sets the maximum memory to use <size>m for Mb or <size>g for Gb, if this parameter is not set 1 Gb is chosen, to set the maximum memory to 2 Gb
+Sets the maximum memory to use <size>m for MB or <size>g for GB, defaulting to 1 GB. To set the maximum memory to 2 GB add this environment variable
 
     -e MC_MAXMEM=2g
 
 #### MC_MINMEM
 
-sets the initial memory reservation used, use <size>m for Mb or <size>g for Gb, if this parameter is not set, it is set to MC_MAXMEM, to set the initial size t0 512 Mb
+Sets the initial memory reservation used, use <size>m for MB or <size>g for GB, if this parameter is not set, it is set to MC_MAXMEM. To set the initial size to 512 MB
 
     -e MC_MINMEM=512m
 
 
 #### SPIGOT_AUTORESTART
 
-This variable controlls the behavior of the container when the **stop** command is issued inside minecraft
+This variable controls the behavior of the container when the **stop** command is issued inside minecraft
 
 	-e SPIGOT_AUTORESTART=yes
    
@@ -185,7 +183,7 @@ If the **stop** command is issued the minecraft server will stay down until the 
 
 #### OTHER_JAVA_OPS
 
-Allows to add other Java options when starting minecraft
+Allows adding other Java options when starting minecraft
 
 	-e OTHER_JAVA_OPS=
 
@@ -244,11 +242,11 @@ To make yourself operator in the game use **mc_send** command, for example give 
 
 ### using the minecraft stop command
 
-Default the minecraft server will automatically restart on a **stop** inside the minecraft application. You can override this behavior by using
+By default the minecraft server will automatically restart on a **stop** inside the minecraft application. You can override this behavior by using
 
 	-e SPIGOT_AUTORESTART=no
 
-This will prevent the server to restart and minecraft has to be started again with the **mc_start** command
+This will prevent the server automatically restarting and minecraft has to be started again with the **mc_start** command
 
 
 ## starting and stopping the server
@@ -272,7 +270,7 @@ When the container is stopped with the command
 	docker stop spigot
 
 the spigot server is shutdown nicely with a console stop command to give it time to save everything before
-stopping the container. If you look in the output from the server this show
+stopping the container. If you look in the output from the server you will see something like
 
 	[13:01:51 INFO]: Stopping the server
 	[13:01:51 INFO]: Stopping server
@@ -286,7 +284,7 @@ stopping the container. If you look in the output from the server this show
 
 ## Having the minecraft files on the host machine
 
-If you delete the container all your filer in minecraft will be gone. To save them where it's
+If you delete the container all your files in minecraft will be gone. To save them where it's
 easier to edit and do a backup of the files you can attach a directory from the host machine
 (where you run the docker command) and attach it to the local file system in the container.
 The syntax for it is

@@ -9,7 +9,7 @@
 function set_java_17 () {
   if ! [ -d /usr/lib/jvm/jdk-17* ]; then
     echo "Downloading JDK 1.17"
-    curl -L https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.1%2B12/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.1_12.tar.gz  | tar xz -C /usr/lib/jvm
+    curl -L https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.1%2B12/OpenJDK17U-jdk_x64_linux_hotspot_17.0.1_12.tar.gz  | tar xz -C /usr/lib/jvm
   fi
 
   echo "set java version to 17"
@@ -74,7 +74,7 @@ case "$1" in
     echo "set_java_ver <version>"
     echo "set the java version for the container"
     echo 
-    echo "Available versions is 8, 11, 16 and 17"
+    echo "Available versions are 8, 11, 16 and 17"
     exit 1
   ;;
 esac

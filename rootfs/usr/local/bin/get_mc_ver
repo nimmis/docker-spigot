@@ -19,7 +19,7 @@
   fi
 
   if [ -f $SPIGOT_HOME/spigot-$1.jar ]; then
-    echo "Successfull build of spigot version $1"	  
+    echo "Successful build of spigot version $1"
   else
     mc_ver=$(ls -l /$SPIGOT_HOME/spigot.jar | grep -Po '(?<=spigot-)\d.\d*')
     echo "BUILD FAILED: spigot version $1 failed (continue running version $mc_ver) "
