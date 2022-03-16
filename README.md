@@ -328,6 +328,21 @@ and you should get an output simular to
 
 and the versionlist is updated.
 
+## Building the Docker Image
+To build this image for your machine you can simply use the normal docker build command
+
+	docker build -t spigot ./
+
+If you want to build this image for multiple architectures you need to use a slightly different set of commands. However this allows you to push a single image from which clients can automatically select the correct architecture.
+
+First set up a binfmt container which allows other architectures to be emulated
+
+	docker run --privileged --rm tonistiigi/binfmt --install all
+
+Then build the images and push (docker doesn't currently support loading multi-arch images directly)
+
+	docker buildx build --platform linux/amd64,linux/arm/v7,linux/arm64 --tag scratchcat1/minecraft-spigot:latest --push ./
+
 ## Old versions news
 
 - Updated java version to 17 which is a LTS version
