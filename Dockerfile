@@ -39,7 +39,7 @@ RUN apt-get update && \
     printf "Build of nimmis/spigot:latest, date: %s\n"  `date -u +"%Y-%m-%dT%H:%M:%SZ"` > /etc/BUILDS/spigot && \
 
     # install application
-    apt-get install -y wget git jq && \
+    apt-get install -y wget git jq libatomic1 && \
 
     # Make special user for minecraft to run in
     /usr/sbin/useradd -s /bin/bash -d /minecraft -m minecraft && \
@@ -61,9 +61,6 @@ RUN apt-get update && \
     apt-get clean all
 
 RUN mkdir -p /usr/lib/jvm/ && \
-
-    # Install java
-    /usr/local/bin/set_java_ver ${JAVA_VERSION_MAJOR} && \
 
     ln -s /usr/lib/jvm/default-jvm/bin/java /usr/bin/java
 
