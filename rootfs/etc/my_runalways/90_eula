@@ -6,7 +6,7 @@
 
 if [ ! -z $EULA ] ; then
   
-  echo "eula=$EULA" > $SPIGOT_HOME/eula.txt
+  echo "eula=${EULA,,}" > $SPIGOT_HOME/eula.txt
   chown minecraft $SPIGOT_HOME/eula.txt 
 
 fi 
