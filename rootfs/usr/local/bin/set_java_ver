@@ -12,7 +12,7 @@ function set_java_18 () {
     curl -L https://github.com/adoptium/temurin18-binaries/releases/download/jdk-18.0.1%2B10/OpenJDK18U-jdk_x64_linux_hotspot_18.0.1_10.tar.gz  | tar xz -C /usr/lib/jvm
   fi
 
-  echo "set java version to 17"
+  echo "set java version to 18"
   rm -f /usr/lib/jvm/default-jvm
   ln -s /usr/lib/jvm/jdk-18* /usr/lib/jvm/default-jvm
 
