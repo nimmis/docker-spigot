@@ -17,7 +17,11 @@ fi
 function load_java() {
 
   case "$1" in
-    latest | 1.18*)
+    latest | 1.19*)
+      /usr/local/bin/set_java_ver 18
+      ;;
+  
+    1.18*)
       /usr/local/bin/set_java_ver 17
       ;;
 
