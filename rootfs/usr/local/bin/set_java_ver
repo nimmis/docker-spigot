@@ -6,6 +6,19 @@
 # (c) 2021 nimmis <kjell.havneskold@gmail.com>
 #
 ###########################################################
+function set_java_18 () {
+  if ! [ -d /usr/lib/jvm/jdk-18* ]; then
+    echo "Downloading JDK 1.18"
+    curl -L https://github.com/adoptium/temurin18-binaries/releases/download/jdk-18.0.1%2B10/OpenJDK18U-jdk_x64_linux_hotspot_18.0.1_10.tar.gz  | tar xz -C /usr/lib/jvm
+  fi
+
+  echo "set java version to 17"
+  rm -f /usr/lib/jvm/default-jvm
+  ln -s /usr/lib/jvm/jdk-18* /usr/lib/jvm/default-jvm
+
+}
+
+
 function set_java_17 () {
   if ! [ -d /usr/lib/jvm/jdk-17* ]; then
     echo "Downloading JDK 1.17"
