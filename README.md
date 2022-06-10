@@ -1,9 +1,9 @@
-## Minecraft server SPIGOT on Ubuntu 20.04 with OpenJDK 11/16/17
+## Minecraft server SPIGOT on Ubuntu 20.04 with OpenJDK 11/16/17/18
 
 ![](https://img.shields.io/docker/pulls/nimmis/spigot?style=flat-square)
 
 
-**NOW works with Minecraft 1.18**
+**NOW works with Minecraft 1.19**
 
 This is a major change in logic to build the correct version of spigot so some combination of conditions may not compile correctly. Please make an issue so I can correct it. There will be another build shortly with another feature
 
@@ -23,7 +23,7 @@ What's new is
 - Possibility to change spigot versions i running containers
 - Detects version if mc-directory already has a precompiled version active
 - Adjust java version depending of MC version, downloads additional java version if needed
-- Support for Minecraft version 1.18
+- Support for Minecraft version 1.19
 
 ## Why not a precompiled version of spigot is included
 
