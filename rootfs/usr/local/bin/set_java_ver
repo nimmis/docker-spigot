@@ -6,6 +6,18 @@
 # (c) 2021 nimmis <kjell.havneskold@gmail.com>
 #
 ###########################################################
+function set_java_20 () {
+  if ! [ -d /usr/lib/jvm/jdk-20* ]; then
+    echo "Downloading JDK 1.20"
+    curl -L https://github.com/adoptium/temurin20-binaries/releases/download/jdk-20%2B36/OpenJDK20U-jdk_x64_linux_hotspot_20_36.tar.gz  | tar xz -C /usr/lib/jvm
+  fi
+
+  echo "set java version to 20"
+  rm -f /usr/lib/jvm/default-jvm
+  ln -s /usr/lib/jvm/jdk-20* /usr/lib/jvm/default-jvm
+
+}
+
 function set_java_18 () {
   if ! [ -d /usr/lib/jvm/jdk-18* ]; then
     echo "Downloading JDK 1.18"
@@ -39,7 +51,7 @@ function set_java_16 () {
   fi
 
   echo "set java version to 16"
-  rm -f /usr/lib/jvm/default-jvm 
+  rm -f /usr/lib/jvm/default-jvm
   ln -s /usr/lib/jvm/jdk-16* /usr/lib/jvm/default-jvm
 
 }
@@ -50,8 +62,8 @@ function set_java_11 () {
     curl -L https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.13%2B8/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz  | tar xz -C /usr/lib/jvm
   fi
 
-  echo "set java version to 16"
-  rm -f /usr/lib/jvm/default-jvm 
+  echo "set java version to 11"
+  rm -f /usr/lib/jvm/default-jvm
   ln -s /usr/lib/jvm/jdk-11* /usr/lib/jvm/default-jvm
 
 }
@@ -68,6 +80,12 @@ function set_java_8 () {
 
 }
 case "$1" in
+  20)
+    set_java_20
+    ;;
+  18)
+    set_java_18
+    ;;
   17)
     set_java_17
     ;;
@@ -86,8 +104,8 @@ case "$1" in
   *)
     echo "set_java_ver <version>"
     echo "set the java version for the container"
-    echo 
-    echo "Available versions are 8, 11, 16 and 17"
+    echo
+    echo "Available versions are 8, 11, 16, 17, 18 and 20"
     exit 1
   ;;
 esac
