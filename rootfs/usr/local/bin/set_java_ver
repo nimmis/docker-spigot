@@ -6,6 +6,18 @@
 # (c) 2021 nimmis <kjell.havneskold@gmail.com>
 #
 ###########################################################
+function set_java_21 () {
+  if ! [ -d /usr/lib/jvm/jdk-21* ]; then
+    echo "Downloading JDK 1.21"
+    curl -L https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.3%2B9/OpenJDK21U-jdk_x64_linux_hotspot_21.0.3_9.tar.gz  | tar xz -C /usr/lib/jvm
+  fi
+
+  echo "set java version to 21"
+  rm -f /usr/lib/jvm/default-jvm
+  ln -s /usr/lib/jvm/jdk-21* /usr/lib/jvm/default-jvm
+
+}
+
 function set_java_20 () {
   if ! [ -d /usr/lib/jvm/jdk-20* ]; then
     echo "Downloading JDK 1.20"
@@ -80,6 +92,9 @@ function set_java_8 () {
 
 }
 case "$1" in
+  21)
+    set_java_21
+    ;;
   20)
     set_java_20
     ;;
@@ -105,7 +120,7 @@ case "$1" in
     echo "set_java_ver <version>"
     echo "set the java version for the container"
     echo
-    echo "Available versions are 8, 11, 16, 17, 18 and 20"
+    echo "Available versions are 8, 11, 16, 17, 18, 20, and 21"
     exit 1
   ;;
 esac
