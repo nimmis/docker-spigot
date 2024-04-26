@@ -1,9 +1,9 @@
-## Minecraft server SPIGOT on Ubuntu 20.04 with OpenJDK 11/16/17/18
+## Minecraft server SPIGOT on Ubuntu 20.04 with OpenJDK 11/16/17/18/20/21
 
 ![](https://img.shields.io/docker/pulls/nimmis/spigot?style=flat-square)
 
 
-**NOW works with Minecraft 1.19**
+**NOW works with Minecraft 1.20.5
 
 This is a major change in logic to build the correct version of spigot so some combination of conditions may not compile correctly. Please make an issue so I can correct it. There will be another build shortly with another feature
 
