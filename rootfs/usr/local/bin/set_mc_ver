@@ -33,8 +33,11 @@ function load_java() {
       /usr/local/bin/set_java_ver 16
       ;;
 
-    *)
+    1.16* | 1.15* | 1.14* | 1.13*)
       /usr/local/bin/set_java_ver 11
+      ;;
+    *)
+      /usr/local/bin/set_java_ver 8
       ;;
 
   esac
